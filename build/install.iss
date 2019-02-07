@@ -1,7 +1,7 @@
 [Setup]
 AppName=League Director
 AppVersion=0.1
-AppVerName=League Director (0.1)
+AppVerName=League Director
 DefaultDirName={pf}\League Director
 DefaultGroupName=League Director
 UninstallDisplayIcon={app}\LeagueDirector.exe
