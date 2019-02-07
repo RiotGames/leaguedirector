@@ -107,6 +107,7 @@ class VisibleWindow(QScrollArea):
         layout = QFormLayout()
         for name, binding, label in self.options:
             self.inputs[name] = BooleanInput()
+            self.inputs[name].setValue(True)
             self.inputs[name].valueChanged.connect(functools.partial(self.api.render.set, name))
             self.bindings[binding] = name
             layout.addRow(label, self.inputs[name])
