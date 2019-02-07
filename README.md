@@ -73,6 +73,8 @@ For usage rights of Riot Games intellectual property, such as the skybox texture
 
 [https://www.riotgames.com/en/legal](https://www.riotgames.com/en/legal)
 
+This project makes used of LGPL licensed software [QT for Python](https://doc.qt.io/qtforpython/licenses.html).
+
 ## Special Thanks
  * Skin Spotlights
  * League of Editing
