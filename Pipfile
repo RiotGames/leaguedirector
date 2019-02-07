@@ -1,0 +1,6 @@
+[packages]
+pyside2 = "==5.12.0"
+psutil = "==5.5.0"
+
+[requires]
+python_version = "3.7"
