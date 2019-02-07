@@ -43,7 +43,8 @@ League Director is a tool for staging and recording videos from League of Legend
 
 ## Tutorial
 
-[![](http://img.youtube.com/vi/bzqydcrw89A/0.jpg)](https://www.youtube.com/watch?v=bzqydcrw89A "League Director Tutorial")
+[![](http://img.youtube.com/vi/bzqydcrw89A/0.jpg)](https://www.youtube.com/watch?v=bzqydcrw89A "League Director Intro")
+[![](http://img.youtube.com/vi/KuHLaDRReRU/0.jpg)](https://www.youtube.com/watch?v=KuHLaDRReRU "League Director Tutorial")
 
 ## Frequently Asked Questions
 TODO
