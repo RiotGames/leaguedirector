@@ -1,5 +1,6 @@
 import threading
 import functools
+import platform
 from ctypes import *
 from PySide2.QtGui import *
 from PySide2.QtCore import *
@@ -37,6 +38,10 @@ class KeyboardHook(QThread):
 
     def run(self):
         self.tid = threading.get_ident()
+        if platform.system() == 'Windows':
+            self.run_windows()
+
+    def run_windows(self):
         from ctypes.wintypes import DWORD, WPARAM, LPARAM, MSG
 
         class KBDLLHOOKSTRUCT(Structure):
