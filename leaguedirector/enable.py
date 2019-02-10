@@ -34,6 +34,16 @@ def findMacInstalled(paths):
     for line in subprocess.check_output(['mdfind', query]).splitlines():
         paths.append(line.decode())
 
+def findMacRunning(paths):
+    """
+    List all the running league client processes.
+    """
+    for process in psutil.process_iter(attrs=['name']):
+        if process.info['name'].lower() == 'leagueclient':
+            path = process.exe().split('/Contents/LoL/RADS/')
+            if len(path) == 2:
+                paths.append(path[0])
+
 def findInstalledGames():
     paths = []
 
@@ -43,6 +53,7 @@ def findInstalledGames():
         findWindowsRunning(paths)
     elif platform.system() == 'Darwin':
         findMacInstalled(paths)
+        findMacRunning(paths)
 
     # Make sure all paths are valid and formatted the same
     paths = [os.path.abspath(path) for path in paths if os.path.isdir(path)]
