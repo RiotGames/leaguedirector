@@ -1,6 +1,7 @@
 import os
 import psutil
 import platform
+import subprocess
 from PySide2.QtCore import *
 
 def findWindowsRegistry(paths):
@@ -25,6 +26,14 @@ def findWindowsRunning(paths):
         elif name in ('launcher.exe', 'singleplayertool.exe') and 'DevRoot' in path:
             paths.append(os.path.join(path.split('\\DevRoot')[0], 'DevRoot'))
 
+def findMacInstalled(paths):
+    """
+    Ask the mac system profiler to list all installed apps.
+    """
+    query = "kMDItemCFBundleIdentifier==com.riotgames.leagueoflegends"
+    for line in subprocess.check_output(['mdfind', query]).splitlines():
+        paths.append(line.decode())
+
 def findInstalledGames():
     paths = []
 
@@ -32,6 +41,8 @@ def findInstalledGames():
     if platform.system() == 'Windows':
         findWindowsRegistry(paths)
         findWindowsRunning(paths)
+    elif platform.system() == 'Darwin':
+        findMacInstalled(paths)
 
     # Make sure all paths are valid and formatted the same
     paths = [os.path.abspath(path) for path in paths if os.path.isdir(path)]
@@ -40,6 +51,8 @@ def findInstalledGames():
     return sorted(list(set(paths)))
 
 def configFilePath(path):
+    if platform.system() == 'Darwin':
+        path = os.path.join(path, 'Contents', 'LoL')
     config = os.path.join(path, "Config", "game.cfg")
     if os.path.exists(config):
         return config
