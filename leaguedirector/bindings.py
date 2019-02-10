@@ -25,7 +25,8 @@ class KeyboardHook(QThread):
     def stop(self):
         self.window.removeEventFilter(self)
         self.running = False
-        windll.user32.PostThreadMessageA(self.tid, 18, 0, 0)
+        if platform.system() == 'Windows':
+            self.stop_windows()
 
     def eventFilter(self, object, event):
         if event.type() == QEvent.ActivationChange:
@@ -40,6 +41,9 @@ class KeyboardHook(QThread):
         self.tid = threading.get_ident()
         if platform.system() == 'Windows':
             self.run_windows()
+
+    def stop_windows(self):
+        windll.user32.PostThreadMessageA(self.tid, 18, 0, 0)
 
     def run_windows(self):
         from ctypes.wintypes import DWORD, WPARAM, LPARAM, MSG
