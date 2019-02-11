@@ -27,6 +27,8 @@ class KeyboardHook(QThread):
         self.running = False
         if platform.system() == 'Windows':
             self.stop_windows()
+        elif platform.system() == 'Darwin':
+            self.stop_mac()
 
     def eventFilter(self, object, event):
         if event.type() == QEvent.ActivationChange:
@@ -41,6 +43,8 @@ class KeyboardHook(QThread):
         self.tid = threading.get_ident()
         if platform.system() == 'Windows':
             self.run_windows()
+        elif platform.system() == 'Darwin':
+            self.run_mac()
 
     def stop_windows(self):
         windll.user32.PostThreadMessageA(self.tid, 18, 0, 0)
@@ -76,6 +80,46 @@ class KeyboardHook(QThread):
             except: pass
 
         windll.user32.UnhookWindowsHookEx(hook)
+
+    def stop_mac(self):
+        from Quartz import CFRunLoopStop
+        if hasattr(self, 'runLoop'):
+            CFRunLoopStop(self.runLoop)
+
+    def run_mac(self):
+        from Quartz import (
+            CGEventTapCreate,
+            CFMachPortCreateRunLoopSource,
+            CFRunLoopAddSource,
+            CFRunLoopGetCurrent,
+            CGEventTapEnable,
+            CFRunLoopRun,
+            CGEventGetIntegerValueField,
+            CGEventPostToPid,
+            kCGEventKeyDown,
+            kCGEventKeyUp,
+            kCGEventFlagsChanged,
+            kCGSessionEventTap,
+            kCGHeadInsertEventTap,
+            kCGEventTargetUnixProcessID,
+            kCFAllocatorDefault,
+            kCFRunLoopCommonModes,
+        )
+        pid = QCoreApplication.applicationPid()
+
+        def callback(proxy, type, event, refcon):
+            if self.pid == CGEventGetIntegerValueField(event, kCGEventTargetUnixProcessID):
+                CGEventPostToPid(pid, event)
+            return event
+
+        mask = (1 << kCGEventKeyDown) | (1 << kCGEventKeyUp) | (1 << kCGEventFlagsChanged)
+        tap = CGEventTapCreate(kCGSessionEventTap, kCGHeadInsertEventTap, 0, mask, callback, None)
+        if tap:
+            source = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
+            self.runLoop = CFRunLoopGetCurrent()
+            CFRunLoopAddSource(self.runLoop, source, kCFRunLoopCommonModes)
+            CGEventTapEnable(tap, True)
+            CFRunLoopRun()
 
 
 class Bindings(QObject):
