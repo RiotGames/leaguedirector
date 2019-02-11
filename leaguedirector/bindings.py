@@ -93,6 +93,7 @@ class KeyboardHook(QThread):
             CFRunLoopAddSource,
             CFRunLoopGetCurrent,
             CGEventTapEnable,
+            CGEventMaskBit,
             CFRunLoopRun,
             CGEventGetIntegerValueField,
             CGEventPostToPid,
@@ -103,7 +104,7 @@ class KeyboardHook(QThread):
             kCGHeadInsertEventTap,
             kCGEventTargetUnixProcessID,
             kCFAllocatorDefault,
-            kCFRunLoopCommonModes,
+            kCFRunLoopDefaultMode,
         )
         pid = QCoreApplication.applicationPid()
 
@@ -112,12 +113,20 @@ class KeyboardHook(QThread):
                 CGEventPostToPid(pid, event)
             return event
 
-        mask = (1 << kCGEventKeyDown) | (1 << kCGEventKeyUp) | (1 << kCGEventFlagsChanged)
-        tap = CGEventTapCreate(kCGSessionEventTap, kCGHeadInsertEventTap, 0, mask, callback, None)
+        tap = CGEventTapCreate(
+            kCGSessionEventTap,
+            kCGHeadInsertEventTap,
+            0,
+            CGEventMaskBit(kCGEventKeyDown) |
+            CGEventMaskBit(kCGEventKeyUp) |
+            CGEventMaskBit(kCGEventFlagsChanged),
+            callback,
+            None
+        )
         if tap:
             source = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
             self.runLoop = CFRunLoopGetCurrent()
-            CFRunLoopAddSource(self.runLoop, source, kCFRunLoopCommonModes)
+            CFRunLoopAddSource(self.runLoop, source, kCFRunLoopDefaultMode)
             CGEventTapEnable(tap, True)
             CFRunLoopRun()
 
