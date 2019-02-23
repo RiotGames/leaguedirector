@@ -63,7 +63,7 @@ $ cd leaguedirector
 $ run.bat
 ```
 
-The run batch file will setup a virtual environment using [Pipenv](https://pipenv.readthedocs.io/en/latest/) and install required dependencies such as [Qt](https://www.qt.io/qt-for-python).
+The run batch file will setup a virtual environment using [venv](https://docs.python.org/3/library/venv.html) and install required dependencies such as [Qt](https://www.qt.io/qt-for-python).
 
 _League Director is being release by Riot Games as a reference implementation for the [Replay API](https://developer.riotgames.com/replay-apis.html). You are free to download and modify this source code or create your own fork of the project but we will not be accepting pull requests at this time._
 

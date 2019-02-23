@@ -2,3 +2,4 @@
 *.DS_Store
 resources/skyboxes/*.dds
 build/out
+env
