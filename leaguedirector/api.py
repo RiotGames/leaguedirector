@@ -544,7 +544,7 @@ class Sequence(Resource):
         if name == 'skyboxOffset':
             return 'Skybox Offset'
         if name == 'sunDirection':
-            return 'Sun Direciton'
+            return 'Sun Direction'
         if name == 'depthFogEnabled':
             return 'Depth Fog Enable'
         if name == 'depthFogStart':
