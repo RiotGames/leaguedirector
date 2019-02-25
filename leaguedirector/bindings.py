@@ -1,5 +1,6 @@
 import threading
 import functools
+import platform
 from ctypes import *
 from PySide2.QtGui import *
 from PySide2.QtCore import *
@@ -24,7 +25,10 @@ class KeyboardHook(QThread):
     def stop(self):
         self.window.removeEventFilter(self)
         self.running = False
-        windll.user32.PostThreadMessageA(self.tid, 18, 0, 0)
+        if platform.system() == 'Windows':
+            self.stop_windows()
+        elif platform.system() == 'Darwin':
+            self.stop_mac()
 
     def eventFilter(self, object, event):
         if event.type() == QEvent.ActivationChange:
@@ -37,6 +41,15 @@ class KeyboardHook(QThread):
 
     def run(self):
         self.tid = threading.get_ident()
+        if platform.system() == 'Windows':
+            self.run_windows()
+        elif platform.system() == 'Darwin':
+            self.run_mac()
+
+    def stop_windows(self):
+        windll.user32.PostThreadMessageA(self.tid, 18, 0, 0)
+
+    def run_windows(self):
         from ctypes.wintypes import DWORD, WPARAM, LPARAM, MSG
 
         class KBDLLHOOKSTRUCT(Structure):
@@ -67,6 +80,55 @@ class KeyboardHook(QThread):
             except: pass
 
         windll.user32.UnhookWindowsHookEx(hook)
+
+    def stop_mac(self):
+        from Quartz import CFRunLoopStop
+        if hasattr(self, 'runLoop'):
+            CFRunLoopStop(self.runLoop)
+
+    def run_mac(self):
+        from Quartz import (
+            CGEventTapCreate,
+            CFMachPortCreateRunLoopSource,
+            CFRunLoopAddSource,
+            CFRunLoopGetCurrent,
+            CGEventTapEnable,
+            CGEventMaskBit,
+            CFRunLoopRun,
+            CGEventGetIntegerValueField,
+            CGEventPostToPid,
+            kCGEventKeyDown,
+            kCGEventKeyUp,
+            kCGEventFlagsChanged,
+            kCGSessionEventTap,
+            kCGHeadInsertEventTap,
+            kCGEventTargetUnixProcessID,
+            kCFAllocatorDefault,
+            kCFRunLoopDefaultMode,
+        )
+        pid = QCoreApplication.applicationPid()
+
+        def callback(proxy, type, event, refcon):
+            if self.pid == CGEventGetIntegerValueField(event, kCGEventTargetUnixProcessID):
+                CGEventPostToPid(pid, event)
+            return event
+
+        tap = CGEventTapCreate(
+            kCGSessionEventTap,
+            kCGHeadInsertEventTap,
+            0,
+            CGEventMaskBit(kCGEventKeyDown) |
+            CGEventMaskBit(kCGEventKeyUp) |
+            CGEventMaskBit(kCGEventFlagsChanged),
+            callback,
+            None
+        )
+        if tap:
+            source = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
+            self.runLoop = CFRunLoopGetCurrent()
+            CFRunLoopAddSource(self.runLoop, source, kCFRunLoopDefaultMode)
+            CGEventTapEnable(tap, True)
+            CFRunLoopRun()
 
 
 class Bindings(QObject):

@@ -935,7 +935,8 @@ class LeagueDirector(object):
         self.window.restoreState(self.settings.value('window/state'))
         self.window.restoreGeometry(self.settings.value('window/geo'))
         for name, widget in self.windows.items():
-            widget.parentWidget().setWindowState(self.settings.value('{}/state'.format(name), widget.parentWidget().windowState()))
+            state = self.settings.value('{}/state'.format(name), widget.parentWidget().windowState())
+            widget.parentWidget().setWindowState(Qt.WindowStates(state))
             widget.parentWidget().setGeometry(self.settings.value('{}/geo'.format(name), widget.parentWidget().geometry()))
             if hasattr(widget, 'restoreSettings'):
                 widget.restoreSettings(self.settings.value('{}/settings'.format(name), {}) or {})
