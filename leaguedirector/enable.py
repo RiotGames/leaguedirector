@@ -1,6 +1,7 @@
 import os
 import psutil
 import platform
+import logging
 import subprocess
 from PySide2.QtCore import *
 
@@ -82,5 +83,6 @@ def isGameEnabled(path):
 def setGameEnabled(path, enabled):
     path = configFilePath(path)
     if path:
+        logging.info('Setting EnableReplayApi %s=%d', path, enabled)
         settings = QSettings(path, QSettings.IniFormat)
         settings.setValue("EnableReplayApi", int(enabled))

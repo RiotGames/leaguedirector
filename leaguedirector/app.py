@@ -1,6 +1,9 @@
 import os
 import sys
 import functools
+import logging
+import logging.handlers
+import leaguedirector
 from PySide2.QtGui import *
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
@@ -790,6 +793,7 @@ class LeagueDirector(object):
         sys.exit(self.app.exec_())
 
     def setup(self):
+        self.setupLogging()
         self.loadTheme()
         self.window = QMainWindow()
         self.mdi = QMdiArea()
@@ -819,6 +823,19 @@ class LeagueDirector(object):
     def closeEvent(self, event):
         self.saveSettings()
         QMainWindow.closeEvent(self.window, event)
+
+    def setupLogging(self):
+        logger = logging.getLogger()
+        formatter = logging.Formatter('%(asctime)s [%(module)s:%(lineno)d] %(message)s')
+        path = userpath('logs', 'leaguedirector.log')
+        exists = os.path.exists(path)
+        handler = logging.handlers.RotatingFileHandler(path, mode='w', backupCount=30)
+        if exists:
+            handler.doRollover()
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+        logging.info('Started League Director (%s)', leaguedirector.__version__)
 
     def setupBindings(self):
         return Bindings(self.window, self.settings.value('bindings', {}), [
