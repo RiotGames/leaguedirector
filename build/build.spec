@@ -4,7 +4,6 @@ from distutils.dir_util import copy_tree
 sys.modules['FixTk'] = None
 
 a = Analysis(['../leaguedirector/app.py'],
-    pathex = ['../'],
     binaries = [],
     datas = [],
     hiddenimports = [],
