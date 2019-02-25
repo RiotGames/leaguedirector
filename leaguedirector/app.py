@@ -788,12 +788,12 @@ class ConnectWindow(QDialog):
 
 class LeagueDirector(object):
     def __init__(self):
+        self.setupLogging()
         self.app = QApplication()
         self.setup()
         sys.exit(self.app.exec_())
 
     def setup(self):
-        self.setupLogging()
         self.loadTheme()
         self.window = QMainWindow()
         self.mdi = QMdiArea()
@@ -826,16 +826,29 @@ class LeagueDirector(object):
 
     def setupLogging(self):
         logger = logging.getLogger()
-        formatter = logging.Formatter('%(asctime)s [%(module)s:%(lineno)d] %(message)s')
+        formatter = logging.Formatter('%(asctime)s [%(levelname)-8s] %(message)s')
         path = userpath('logs', 'leaguedirector.log')
-        exists = os.path.exists(path)
-        handler = logging.handlers.RotatingFileHandler(path, mode='w', backupCount=30)
-        if exists:
-            handler.doRollover()
+        handler = logging.handlers.RotatingFileHandler(path, backupCount=20)
+        handler.doRollover()
         handler.setFormatter(formatter)
         logger.addHandler(handler)
-        logger.setLevel(logging.INFO)
+        logger.setLevel(logging.DEBUG)
         logging.info('Started League Director (%s)', leaguedirector.__version__)
+        qInstallMessageHandler(self.handleMessage)
+
+    def handleMessage(self, msgType, msgContext, msgString):
+        if msgType == QtInfoMsg:
+            logging.info('(QT) %s', msgString)
+        elif msgType == QtDebugMsg:
+            logging.debug('(QT) %s', msgString)
+        elif msgType == QtWarningMsg:
+            logging.warning('(QT) %s', msgString)
+        elif msgType == QtCriticalMsg:
+            logging.critical('(QT) %s', msgString)
+        elif msgType == QtFatalMsg:
+            logging.critical('(QT) %s', msgString)
+        elif msgType == QtSystemMsg:
+            logging.critical('(QT) %s', msgString)
 
     def setupBindings(self):
         return Bindings(self.window, self.settings.value('bindings', {}), [
