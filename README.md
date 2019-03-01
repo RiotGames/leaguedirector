@@ -51,12 +51,13 @@ Introduction | Walkthrough
 
 The forward, back, left, right key bindings for the FPS camera are actually set in the game options screen. With a replay running, open the options screen (ESC) and then go into 'Hotkeys' and into the section 'First Person Camera'.
 
-**Why is the skybox black / Why won't the skybox change?**
+**Why is the skybox black?**  
+**Why won't the skybox change?**
 
 League Director requires your game to be set to the highest graphics settings. With a replay running, open the options screen (ESC) and under the 'Video' section set the graphics options to 'Very High'. You must restart the replay after changing this setting in order for it to take effect.
 
-**League director does not show my game install on the options screen?**
-**League Director does not connect to my replay**
+**League Director does not show my game install on the options screen?**  
+**League Director does not connect to my replay?**
 
 If league director fails to find and configure your game client correctly don't worry because you can do it manually. Simple open up an explorer window where to where your game is installed, then look inside the Config folder for a file called 'game.cfg'. Right click and open this file with notepad and under the section labeled '[General]' make sure there is a value set to the following.
 
