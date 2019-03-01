@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-pyside2 = "==5.12.1"
+pyside2 = "==5.12.0"
 psutil = "==5.5.0"
 pyobjc = {version = "==5.1.2", sys_platform = "== 'darwin'"}
 
