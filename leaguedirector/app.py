@@ -829,7 +829,9 @@ class LeagueDirector(object):
         formatter = logging.Formatter('%(asctime)s [%(levelname)-8s] %(message)s')
         path = userpath('logs', 'leaguedirector.log')
         handler = logging.handlers.RotatingFileHandler(path, backupCount=20)
-        handler.doRollover()
+        try:
+            handler.doRollover()
+        except Exception: pass
         handler.setFormatter(formatter)
         logger.addHandler(handler)
         logger.setLevel(logging.DEBUG)
@@ -1015,4 +1017,7 @@ class LeagueDirector(object):
 
 
 if __name__ == '__main__':
-    LeagueDirector()
+    try:
+        LeagueDirector()
+    except Exception as exception:
+        logging.exception(exception)
