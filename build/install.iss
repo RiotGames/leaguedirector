@@ -14,7 +14,6 @@ LicenseFile=..\LICENSE
 
 [Files]
 Source: "out\dist\LeagueDirector\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
-Source: "..\resources\*"; DestDir: "{app}\resources\"; Flags: ignoreversion recursesubdirs
 
 [Icons]
 Name: "{group}\League Director"; Filename: "{app}\LeagueDirector.exe"

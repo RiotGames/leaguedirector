@@ -31,6 +31,7 @@ coll = COLLECT(exe, a.binaries, a.zipfiles, a.datas,
     upx = True,
     name = 'LeagueDirector'
 )
+copy_tree('../resources/', 'out/dist/LeagueDirector/resources/')
 if platform.system() == 'Darwin':
     app = BUNDLE(exe,
         icon = '../resources/icon.icns',
@@ -41,4 +42,3 @@ if platform.system() == 'Darwin':
         },
     )
     copy_tree('out/dist/LeagueDirector/', 'out/dist/LeagueDirector.app/Contents/MacOS/')
-    copy_tree('../resources/', 'out/dist/LeagueDirector.app/Contents/MacOS/resources/')
