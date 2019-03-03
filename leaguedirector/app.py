@@ -12,6 +12,7 @@ from leaguedirector.sequencer import *
 from leaguedirector.enable import *
 from leaguedirector.api import Game, Playback, Render, Recording, Sequence
 from leaguedirector.bindings import Bindings
+from leaguedirector.settings import Settings
 
 
 class SkyboxCombo(QComboBox):
@@ -799,7 +800,7 @@ class LeagueDirector(object):
         self.mdi = QMdiArea()
         self.api = Api()
         self.windows = {}
-        self.settings = QSettings("RiotGames", "LeagueDirector")
+        self.settings = Settings()
         self.bindings = self.setupBindings()
         self.addWindow(RenderWindow(self.api), 'render')
         self.addWindow(VisibleWindow(self.api), 'visible')
