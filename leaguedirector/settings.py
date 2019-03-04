@@ -1,12 +1,10 @@
-from PySide2.QtGui import *
-from PySide2.QtCore import *
-from PySide2.QtWidgets import *
-from leaguedirector.widgets import *
+import os
+import json
+from leaguedirector.widgets import userpath
 
-class Settings(QObject):
+class Settings(object):
 
     def __init__(self):
-        QObject.__init__(self)
         self.data = {}
         self.path = userpath('config.json')
         self.loadFile()
@@ -20,12 +18,9 @@ class Settings(QObject):
 
     def saveFile(self):
         with open(self.path, 'w') as f:
-            document = QJsonDocument(self.data)
-            json = document.toJson().data().decode('utf8')
-            f.write(json)
+            json.dump(self.data, f, sort_keys=True, indent=4)
 
     def loadFile(self):
         if os.path.isfile(self.path):
             with open(self.path, 'r') as f:
-                json = QByteArray(f.read().encode('utf8'))
-                document = QJsonDocument.fromJson(json)
+                self.data = json.load(f)

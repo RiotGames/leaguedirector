@@ -964,23 +964,32 @@ class LeagueDirector(object):
             else:
                 window.parent().setVisible(self.api.game.connected)
 
+    def loadGeometry(self, widget, data):
+        if data and len(data) == 4:
+            widget.setGeometry(*data)
+
+    def loadState(self, widget, data):
+        if data is not None:
+            widget.setWindowState(Qt.WindowStates(data))
+
     def restoreSettings(self):
-        self.window.restoreState(self.settings.value('window/state'))
-        self.window.restoreGeometry(self.settings.value('window/geo'))
+        self.loadState(self.window, self.settings.value('window/state'))
+        self.loadGeometry(self.window, self.settings.value('window/geo'))
         for name, widget in self.windows.items():
-            state = self.settings.value('{}/state'.format(name), widget.parentWidget().windowState())
-            widget.parentWidget().setWindowState(Qt.WindowStates(state))
-            widget.parentWidget().setGeometry(self.settings.value('{}/geo'.format(name), widget.parentWidget().geometry()))
+            parent = widget.parentWidget()
+            self.loadState(parent, self.settings.value('{}/state'.format(name)))
+            self.loadGeometry(parent, self.settings.value('{}/geo'.format(name)))
             if hasattr(widget, 'restoreSettings'):
                 widget.restoreSettings(self.settings.value('{}/settings'.format(name), {}) or {})
 
     def saveSettings(self):
         self.settings.setValue('bindings', self.bindings.getBindings())
-        self.settings.setValue('window/state', self.window.saveState())
-        self.settings.setValue('window/geo', self.window.saveGeometry())
+        self.settings.setValue('window/state', int(self.window.windowState()))
+        self.settings.setValue('window/geo', self.window.geometry().getRect())
         for name, widget in self.windows.items():
-            self.settings.setValue('{}/state'.format(name), int(widget.parentWidget().windowState()))
-            self.settings.setValue('{}/geo'.format(name), widget.parentWidget().geometry())
+            parent = widget.parentWidget()
+            self.settings.setValue('{}/state'.format(name), int(parent.windowState()))
+            self.settings.setValue('{}/geo'.format(name), parent.geometry().getRect())
             if hasattr(widget, 'saveSettings'):
                 self.settings.setValue('{}/settings'.format(name), widget.saveSettings())
 
