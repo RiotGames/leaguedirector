@@ -748,8 +748,8 @@ class ConnectWindow(QDialog):
         self.welcome.setText("""
             <h3>Welcome to League Director!</h3>
             <p><a href="https://github.com/riotgames/leaguedirector/">https://github.com/riotgames/leaguedirector/</a></p>
-            <p>Please make sure your League of Legends install is enabled by ticking the boxes below.</p>
-            <p>Once enabled, start up a replay in the League of Legends client to begin.<br/></p>
+            <p>First ensure your game has enabled the <a href="https://developer.riotgames.com/replay-apis.html">Replay API</a> by checking the box next to your installation.</p>
+            <p>Once enabled, start up a replay in the League of Legends client and League Director will automatically connect.<br/></p>
         """)
         self.welcome.setTextInteractionFlags(Qt.TextBrowserInteraction)
         self.welcome.setTextFormat(Qt.RichText)
