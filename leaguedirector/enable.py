@@ -24,6 +24,8 @@ def findWindowsRunning(paths):
         path = process.info['exe']
         if name == 'leagueclient.exe' and '\\RADS' in path:
             paths.append(path.split('\\RADS')[0])
+        if name == 'leagueclient.exe' and '\\LeagueClient\\' in path:
+            paths.append(os.path.join(path.split('\\LeagueClient')[0], 'Game'))
         elif name in ('launcher.exe', 'singleplayertool.exe') and 'DevRoot' in path:
             paths.append(os.path.join(path.split('\\DevRoot')[0], 'DevRoot'))
 
