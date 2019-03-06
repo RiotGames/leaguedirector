@@ -101,7 +101,8 @@ class VisibleWindow(QScrollArea):
     def __init__(self, api):
         QScrollArea.__init__(self)
         self.api = api
-        self.api.updated.connect(self.update)
+        self.api.render.updated.connect(self.update)
+        self.api.connected.connect(self.connect)
         self.inputs = {}
         self.bindings = {}
         self.setWidgetResizable(True)
@@ -118,9 +119,13 @@ class VisibleWindow(QScrollArea):
         widget.setLayout(layout)
         self.setWidget(widget)
 
-    def update(self):
+    def connect(self):
         for name, field in self.inputs.items():
             self.api.render.set(name, field.value())
+
+    def update(self):
+        for name, field in self.inputs.items():
+            field.setValue(self.api.render.get(name))
 
     def restoreSettings(self, data):
         for name, value in data.items():
@@ -140,7 +145,7 @@ class RenderWindow(QScrollArea):
     def __init__(self, api):
         QScrollArea.__init__(self)
         self.api = api
-        self.api.updated.connect(self.update)
+        self.api.render.updated.connect(self.update)
         self.cameraMode = QLabel('')
         self.cameraLockX = BooleanInput('X')
         self.cameraLockY = BooleanInput('Y')
@@ -320,7 +325,7 @@ class RecordingWindow(VBoxWidget):
     def __init__(self, api):
         VBoxWidget.__init__(self)
         self.api = api
-        self.api.updated.connect(self.update)
+        self.api.recording.updated.connect(self.update)
         self.recordings = set()
 
         self.codec = QComboBox()
@@ -435,7 +440,8 @@ class TimelineWindow(QWidget):
     def __init__(self, api):
         QWidget.__init__(self)
         self.api = api
-        self.api.updated.connect(self.update)
+        self.api.playback.updated.connect(self.update)
+        self.api.sequence.updated.connect(self.update)
         self.timer = schedule(10, self.animate)
         self.sequenceHeaders = SequenceHeaderView(self.api)
         self.sequenceTracks = SequenceTrackView(self.api, self.sequenceHeaders)
@@ -656,19 +662,25 @@ class TimelineWindow(QWidget):
 
 
 class Api(QObject):
-    updated = Signal()
+    connected = Signal()
 
     def __init__(self):
         QObject.__init__(self)
+        self.wasConnected = False
         self.game = Game()
         self.render = Render()
         self.playback = Playback()
         self.recording = Recording()
         self.sequence = Sequence(self.render, self.playback)
-        self.game.updated.connect(self.updated.emit)
-        self.render.updated.connect(self.updated.emit)
-        self.playback.updated.connect(self.updated.emit)
-        self.recording.updated.connect(self.updated.emit)
+        self.game.updated.connect(self.updated)
+        self.render.updated.connect(self.updated)
+        self.playback.updated.connect(self.updated)
+        self.recording.updated.connect(self.updated)
+
+    def updated(self):
+        if not self.wasConnected and self.game.connected:
+            self.connected.emit()
+        self.wasConnected = self.game.connected
 
     def update(self):
         self.game.update()

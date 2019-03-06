@@ -293,7 +293,8 @@ class SequenceTrackView(QGraphicsView):
         self.time.setPen(QPen(QApplication.palette().highlight(), 1))
         self.time.setFlags(QGraphicsItem.ItemIgnoresTransformations)
         self.scene.addItem(self.time)
-        self.api.updated.connect(self.update)
+        self.api.playback.updated.connect(self.update)
+        self.api.sequence.updated.connect(self.update)
         self.api.sequence.dataLoaded.connect(self.reload)
         headers.addKeyframe.connect(self.addKeyframe)
         headers.verticalScrollBar().valueChanged.connect(lambda value: self.verticalScrollBar().setValue(value))
@@ -425,7 +426,8 @@ class SequenceSelectedView(QWidget):
     def __init__(self, api, tracks):
         QWidget.__init__(self)
         self.api = api
-        self.api.updated.connect(self.update)
+        self.api.playback.updated.connect(self.update)
+        self.api.sequence.updated.connect(self.update)
         self.tracks = tracks
         self.tracks.selectionChanged.connect(self.update)
         self.form = QFormLayout(self)
