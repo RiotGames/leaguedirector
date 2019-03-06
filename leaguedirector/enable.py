@@ -76,7 +76,7 @@ def findInstalledGames():
     paths = [configFilePath(os.path.abspath(path)) for path in paths]
 
     # Remove nones + duplicates and sort
-    return sorted(list(set([path for path in paths if path is not None])))
+    return sorted(list(set([os.path.normcase(path) for path in paths if path is not None])))
 
 def configFilePath(path):
     path = os.path.abspath(path)
