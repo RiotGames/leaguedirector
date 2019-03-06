@@ -2,6 +2,7 @@ import os
 import time
 import json
 import copy
+import logging
 import functools
 from leaguedirector.widgets import userpath
 from PySide2.QtCore import *
@@ -84,7 +85,7 @@ class Resource(QObject):
         elif error in (QNetworkReply.ConnectionRefusedError, QNetworkReply.TimeoutError):
             Resource.connected = False
         else:
-            print(self.url, response.errorString())
+            logging.error("Request Failed: {} {}".format(self.url, response.errorString()))
         self.updated.emit()
 
     def apply(self, data):
