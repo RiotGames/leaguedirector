@@ -2,6 +2,7 @@
 AppName=League Director
 AppVersion=0.1.1
 AppVerName=League Director
+DisableDirPage=no
 DefaultDirName={pf}\League Director
 DefaultGroupName=League Director
 UninstallDisplayIcon={app}\LeagueDirector.exe
