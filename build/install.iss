@@ -1,6 +1,6 @@
 [Setup]
 AppName=League Director
-AppVersion=0.1
+AppVersion=0.1.1
 AppVerName=League Director
 DefaultDirName={pf}\League Director
 DefaultGroupName=League Director
