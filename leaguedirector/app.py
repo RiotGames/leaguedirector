@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 import functools
 import logging
 import logging.handlers
@@ -7,6 +8,7 @@ import leaguedirector
 from PySide2.QtGui import *
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
+from PySide2.QtNetwork import *
 from leaguedirector.widgets import *
 from leaguedirector.sequencer import *
 from leaguedirector.enable import *
@@ -799,6 +801,25 @@ class ConnectWindow(QDialog):
             self.list.addItem(item)
 
 
+class UpdateWindow(QDialog):
+    def __init__(self):
+        QDialog.__init__(self)
+        self.setWindowTitle('Update Available!')
+        self.layout = QVBoxLayout()
+        self.setLayout(self.layout)
+        self.setWindowModality(Qt.WindowModal)
+        self.welcome = QLabel()
+        self.welcome.setText("""
+            <h3>A new version of League Director is available!</h3>
+            <p><a href="https://github.com/riotgames/leaguedirector/releases/latest">https://github.com/riotgames/leaguedirector/releases/latest</a></p>
+            <p>Download the latest version by clicking the link above.</p>
+        """)
+        self.welcome.setTextInteractionFlags(Qt.TextBrowserInteraction)
+        self.welcome.setTextFormat(Qt.RichText)
+        self.welcome.setOpenExternalLinks(True)
+        self.layout.addWidget(self.welcome)
+
+
 class LeagueDirector(object):
     def __init__(self):
         self.setupLogging()
@@ -820,12 +841,14 @@ class LeagueDirector(object):
         self.addWindow(RecordingWindow(self.api), 'recording')
         self.addWindow(KeybindingsWindow(self.bindings), 'bindings')
         self.addWindow(ConnectWindow(), 'connect')
+        self.addWindow(UpdateWindow(), 'update')
         self.window.setCentralWidget(self.mdi)
         self.window.setWindowTitle('League Director')
         self.window.setWindowIcon(QIcon(respath('icon.ico')))
         self.window.closeEvent = self.closeEvent
         self.window.show()
         self.restoreSettings()
+        self.checkUpdate()
         self.bindings.triggered.connect(self.api.onKeybinding)
         self.bindings.triggered.connect(self.windows['timeline'].onKeybinding)
         self.bindings.triggered.connect(self.windows['visible'].onKeybinding)
@@ -847,9 +870,23 @@ class LeagueDirector(object):
         except Exception: pass
         handler.setFormatter(formatter)
         logger.addHandler(handler)
-        logger.setLevel(logging.DEBUG)
+        handler = logging.StreamHandler()
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
         logging.info('Started League Director (%s)', leaguedirector.__version__)
         qInstallMessageHandler(self.handleMessage)
+
+    def checkUpdate(self):
+        self.updateAvailable = False
+        request = QNetworkRequest(QUrl('https://api.github.com/repos/riotgames/leaguedirector/releases/latest'))
+        response = self.api.game.manager().get(request)
+        def callback():
+            if response.error() == QNetworkReply.NoError:
+                version = json.loads(response.readAll().data().decode()).get('tag_name')
+                if version and version != 'v{}'.format(leaguedirector.__version__):
+                    self.updateAvailable = True
+        response.finished.connect(callback)
 
     def handleMessage(self, msgType, msgContext, msgString):
         if msgType == QtInfoMsg:
@@ -971,7 +1008,9 @@ class LeagueDirector(object):
         self.api.update()
         self.bindings.setGamePid(self.api.game.processID)
         for name, window in self.windows.items():
-            if name == 'connect':
+            if name == 'update':
+                window.parent().setVisible(self.updateAvailable)
+            elif name == 'connect':
                 window.parent().setVisible(not self.api.game.connected)
             else:
                 window.parent().setVisible(self.api.game.connected)
