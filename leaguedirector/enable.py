@@ -38,7 +38,7 @@ def findWindowsCached(paths):
     """
     settings = QSettings('HKEY_CURRENT_USER\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\MuiCache', QSettings.NativeFormat);
     for key in settings.allKeys():
-        index = key.lower().find('league of legends.exe.friendlyappname')
+        index = key.lower().find('league of legends.exe')
         if index > 0:
             paths.append(key[0:index])
 
