@@ -226,6 +226,28 @@ class Render(Resource):
         self.cameraRotation = copy
 
 
+class Particles(Resource):
+    url = '/replay/particles'
+    fields = {}
+    particles = {}
+
+    def apply(self, data):
+        self.particles = data
+
+    def items(self):
+        return self.particles.items()
+
+    def hasParticle(self, particle):
+        return particle in self.particles
+
+    def setParticle(self, particle, enabled):
+        if particle in self.particles:
+            self.update({particle:enabled})
+
+    def getParticle(self, particle):
+        return self.particles.get(particle, True)
+
+
 class Playback(Resource):
     url = '/replay/playback'
     fields = {

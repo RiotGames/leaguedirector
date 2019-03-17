@@ -12,7 +12,7 @@ from PySide2.QtNetwork import *
 from leaguedirector.widgets import *
 from leaguedirector.sequencer import *
 from leaguedirector.enable import *
-from leaguedirector.api import Game, Playback, Render, Recording, Sequence
+from leaguedirector.api import Game, Playback, Render, Particles, Recording, Sequence
 from leaguedirector.bindings import Bindings
 from leaguedirector.settings import Settings
 
@@ -321,6 +321,50 @@ class RenderWindow(QScrollArea):
         self.depthOfFieldNear.update(self.api.render.depthOfFieldNear)
         self.depthOfFieldMid.update(self.api.render.depthOfFieldMid)
         self.depthOfFieldFar.update(self.api.render.depthOfFieldFar)
+
+
+class ParticlesWindow(VBoxWidget):
+    def __init__(self, api):
+        VBoxWidget.__init__(self)
+        self.api = api
+        self.api.particles.updated.connect(self.update)
+        self.items = {}
+        self.search = QLineEdit()
+        self.search.setPlaceholderText('Search...')
+        self.search.textEdited.connect(self.textEdited)
+        self.list = QListWidget()
+        self.list.setSortingEnabled(True)
+        self.list.itemChanged.connect(self.itemChanged)
+        self.addWidget(self.search)
+        self.addWidget(self.list)
+        self.setWindowTitle('Particles')
+
+    def textEdited(self, text):
+        search = text.lower()
+        for particle, item in self.items.items():
+            if len(search) == 0 or search in particle.lower():
+                item.setHidden(False)
+            else:
+                item.setHidden(True)
+
+    def itemChanged(self, item):
+        particle = item.text()
+        enabled = item.checkState() == Qt.Checked
+        if enabled != self.api.particles.getParticle(particle):
+            self.api.particles.setParticle(particle, enabled)
+
+    def update(self):
+        for particle, enabled in self.api.particles.items():
+            if particle not in self.items:
+                item = QListWidgetItem(particle)
+                item.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
+                item.setBackground(QApplication.palette().toolTipBase())
+                self.list.addItem(item)
+                self.items[particle] = item
+            self.items[particle].setCheckState(Qt.Checked if enabled else Qt.Unchecked)
+        for particle in self.items.keys():
+            if not self.api.particles.hasParticle(particle):
+                self.list.removeItemWidget(self.items.pop(particle))
 
 
 class RecordingWindow(VBoxWidget):
@@ -671,11 +715,13 @@ class Api(QObject):
         self.wasConnected = False
         self.game = Game()
         self.render = Render()
+        self.particles = Particles()
         self.playback = Playback()
         self.recording = Recording()
         self.sequence = Sequence(self.render, self.playback)
         self.game.updated.connect(self.updated)
         self.render.updated.connect(self.updated)
+        self.particles.updated.connect(self.updated)
         self.playback.updated.connect(self.updated)
         self.recording.updated.connect(self.updated)
 
@@ -687,6 +733,7 @@ class Api(QObject):
     def update(self):
         self.game.update()
         self.render.update()
+        self.particles.update()
         self.playback.update()
         self.recording.update()
 
@@ -836,6 +883,7 @@ class LeagueDirector(object):
         self.settings = Settings()
         self.bindings = self.setupBindings()
         self.addWindow(RenderWindow(self.api), 'render')
+        self.addWindow(ParticlesWindow(self.api), 'particles')
         self.addWindow(VisibleWindow(self.api), 'visible')
         self.addWindow(TimelineWindow(self.api), 'timeline')
         self.addWindow(RecordingWindow(self.api), 'recording')
