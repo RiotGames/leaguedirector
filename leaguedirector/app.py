@@ -774,6 +774,18 @@ class Api(QObject):
             self.render.fieldOfView = self.render.fieldOfView * 1.05
         elif name == 'camera_fov_down':
             self.render.fieldOfView = self.render.fieldOfView * 0.95
+        elif name == 'render_dof_near_up':
+            self.render.depthOfFieldNear = self.render.depthOfFieldNear * 1.05
+        elif name == 'render_dof_near_down':
+            self.render.depthOfFieldNear = self.render.depthOfFieldNear * 0.95
+        elif name == 'render_dof_mid_up':
+            self.render.depthOfFieldMid = self.render.depthOfFieldMid * 1.05
+        elif name == 'render_dof_mid_down':
+            self.render.depthOfFieldMid = self.render.depthOfFieldMid * 0.95
+        elif name == 'render_dof_far_up':
+            self.render.depthOfFieldFar = self.render.depthOfFieldFar * 1.05
+        elif name == 'render_dof_far_down':
+            self.render.depthOfFieldFar = self.render.depthOfFieldFar * 0.95
         elif name == 'play_pause':
             self.playback.paused = not self.playback.paused
         elif name == 'time_minus_120':
@@ -971,6 +983,12 @@ class LeagueDirector(object):
             ('camera_attach',               'Camera Attach',                    ''),
             ('camera_fov_up',               'Camera Increase Field of View',    ''),
             ('camera_fov_down',             'Camera Decrease Field of View',    ''),
+            ('render_dof_near_up',          'Increase Depth of Field Near',     ''),
+            ('render_dof_near_down',        'Decrease Depth of Field Near',     ''),
+            ('render_dof_mid_up',           'Increase Depth of Field Mid',      ''),
+            ('render_dof_mid_down',         'Decrease Depth of Field Mid',      ''),
+            ('render_dof_far_up',           'Increase Depth of Field Far',      ''),
+            ('render_dof_far_down',         'Decrease Depth of Field Far',      ''),
             ('show_fog_of_war',             'Show Fog of War',                  ''),
             ('show_selected_outline',       'Show Selected Outline',            ''),
             ('show_hover_outline',          'Show Hover Outline',               ''),
