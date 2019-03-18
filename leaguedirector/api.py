@@ -374,6 +374,7 @@ class Sequence(Resource):
         self.playback = playback
         self.name = ''
         self.names = []
+        self.directory = None
         self.sequencing = False
         self.saveRemoteTimer = QTimer()
         self.saveRemoteTimer.timeout.connect(self.saveRemoteNow)
