@@ -72,10 +72,8 @@ class KeybindingsWindow(QScrollArea):
     def edited(self, name, field, *args):
         self.bindings.setBinding(name, field.keySequence())
 
-
 class VisibleWindow(QScrollArea):
-    options = [
-        ('fogOfWar', 'show_fog_of_war', 'Show Fog Of War?'),
+    options = [('fogOfWar', 'show_fog_of_war', 'Show Fog Of War?'),
         ('outlineSelect', 'show_selected_outline', 'Show Selected Outline?'),
         ('outlineHover', 'show_hover_outline', 'Show Hover Outline?'),
         ('floatingText', 'show_floating_text', 'Show Floating Text?'),
@@ -97,8 +95,7 @@ class VisibleWindow(QScrollArea):
         ('healthBarMinions', 'show_healthbar_minions', 'Show Health Minions?'),
         ('environment', 'show_environment', 'Show Environment?'),
         ('characters', 'show_characters', 'Show Characters?'),
-        ('particles', 'show_particles', 'Show Particles?'),
-    ]
+        ('particles', 'show_particles', 'Show Particles?'),]
 
     def __init__(self, api):
         QScrollArea.__init__(self)
@@ -144,8 +141,99 @@ class VisibleWindow(QScrollArea):
 
 
 class RenderWindow(QScrollArea):
+   
     def __init__(self, api):
         QScrollArea.__init__(self)
+
+        self.initializeInputs(api)
+        self.attachValueChangedHandlers()
+
+        widget = QWidget()
+        layout = self.getLayout()
+        widget.setLayout(layout)
+        self.setWidgetResizable(True)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setWidget(widget)
+        self.setWindowTitle('Rendering')
+
+    def getLayout(self) -> QFormLayout:
+        layout = QFormLayout()
+        layout.addRow('Camera Mode', self.cameraMode)
+        layout.addRow('Camera Lock', HBoxWidget(self.cameraLockX, self.cameraLockY, self.cameraLockZ))
+        layout.addRow('Camera Position', self.cameraPosition)
+        layout.addRow('Camera Rotation', self.cameraRotation)
+        layout.addRow('Camera Attached', self.cameraAttached)
+        layout.addRow('Camera Move Speed', self.cameraMoveSpeed)
+        layout.addRow('Camera Look Speed', self.cameraLookSpeed)
+        layout.addRow('Field of View', self.fieldOfView)
+        layout.addRow('Near Clip', self.nearClip)
+        layout.addRow('Far Clip', self.farClip)
+        layout.addRow('Nav Grid Offset', self.navGrid)
+        layout.addRow(Separator())
+        layout.addRow('Skybox', self.skyboxes)
+        layout.addRow('Skybox Rotation', self.skyboxRotation)
+        layout.addRow('Skybox Offset', self.skyboxOffset)
+        layout.addRow('Skybox Radius', self.skyboxRadius)
+        layout.addRow('Sun Direction', self.sunDirection)
+        layout.addRow(Separator())
+        layout.addRow('Depth Fog', self.depthFogEnabled)
+        layout.addRow('Depth Fog Start', self.depthFogStart)
+        layout.addRow('Depth Fog End', self.depthFogEnd)
+        layout.addRow('Depth Fog Intensity', self.depthFogIntensity)
+        layout.addRow('Depth Fog Color', self.depthFogColor)
+        layout.addRow(Separator())
+        layout.addRow('Height Fog', self.heightFogEnabled)
+        layout.addRow('Height Fog Start', self.heightFogStart)
+        layout.addRow('Height Fog End', self.heightFogEnd)
+        layout.addRow('Height Fog Intensity', self.heightFogIntensity)
+        layout.addRow('Height Fog Color', self.heightFogColor)
+        layout.addRow(Separator())
+        layout.addRow('Depth of Field', self.depthOfFieldEnabled)
+        layout.addRow('Depth of Field Debug', self.depthOfFieldDebug)
+        layout.addRow('Depth of Field Circle', self.depthOfFieldCircle)
+        layout.addRow('Depth of Field Width', self.depthOfFieldWidth)
+        layout.addRow('Depth of Field Near', self.depthOfFieldNear)
+        layout.addRow('Depth of Field Mid', self.depthOfFieldMid)
+        layout.addRow('Depth of Field Far', self.depthOfFieldFar)
+        return layout
+
+    def attachValueChangedHandlers(self):
+        self.cameraLockX.valueChanged.connect(self.api.render.toggleCameraLockX)
+        self.cameraLockY.valueChanged.connect(self.api.render.toggleCameraLockY)
+        self.cameraLockZ.valueChanged.connect(self.api.render.toggleCameraLockZ)
+        self.cameraPosition.valueChanged.connect(functools.partial(self.api.render.set, 'cameraPosition'))
+        self.cameraRotation.valueChanged.connect(functools.partial(self.api.render.set, 'cameraRotation'))
+        self.cameraAttached.valueChanged.connect(functools.partial(self.api.render.set, 'cameraAttached'))
+        self.cameraMoveSpeed.valueChanged.connect(functools.partial(self.api.render.set, 'cameraMoveSpeed'))
+        self.cameraLookSpeed.valueChanged.connect(functools.partial(self.api.render.set, 'cameraLookSpeed'))
+        self.fieldOfView.valueChanged.connect(functools.partial(self.api.render.set, 'fieldOfView'))
+        self.nearClip.valueChanged.connect(functools.partial(self.api.render.set, 'nearClip'))
+        self.farClip.valueChanged.connect(functools.partial(self.api.render.set, 'farClip'))
+        self.navGrid.valueChanged.connect(functools.partial(self.api.render.set, 'navGridOffset'))
+        self.skyboxes.activated.connect(lambda index: self.api.render.set('skyboxPath', self.skyboxes.itemData(index)))
+        self.skyboxRotation.valueChanged.connect(functools.partial(self.api.render.set, 'skyboxRotation'))
+        self.skyboxRadius.valueChanged.connect(functools.partial(self.api.render.set, 'skyboxRadius'))
+        self.skyboxOffset.valueChanged.connect(functools.partial(self.api.render.set, 'skyboxOffset'))
+        self.sunDirection.valueChanged.connect(functools.partial(self.api.render.set, 'sunDirection'))
+        self.depthFogEnabled.valueChanged.connect(functools.partial(self.api.render.set, 'depthFogEnabled'))
+        self.depthFogStart.valueChanged.connect(functools.partial(self.api.render.set, 'depthFogStart'))
+        self.depthFogEnd.valueChanged.connect(functools.partial(self.api.render.set, 'depthFogEnd'))
+        self.depthFogIntensity.valueChanged.connect(functools.partial(self.api.render.set, 'depthFogIntensity'))
+        self.depthFogColor.valueChanged.connect(functools.partial(self.api.render.set, 'depthFogColor'))
+        self.heightFogEnabled.valueChanged.connect(functools.partial(self.api.render.set, 'heightFogEnabled'))
+        self.heightFogStart.valueChanged.connect(functools.partial(self.api.render.set, 'heightFogStart'))
+        self.heightFogEnd.valueChanged.connect(functools.partial(self.api.render.set, 'heightFogEnd'))
+        self.heightFogIntensity.valueChanged.connect(functools.partial(self.api.render.set, 'heightFogIntensity'))
+        self.heightFogColor.valueChanged.connect(functools.partial(self.api.render.set, 'heightFogColor'))
+        self.depthOfFieldEnabled.valueChanged.connect(functools.partial(self.api.render.set, 'depthOfFieldEnabled'))
+        self.depthOfFieldDebug.valueChanged.connect(functools.partial(self.api.render.set, 'depthOfFieldDebug'))
+        self.depthOfFieldCircle.valueChanged.connect(functools.partial(self.api.render.set, 'depthOfFieldCircle'))
+        self.depthOfFieldWidth.valueChanged.connect(functools.partial(self.api.render.set, 'depthOfFieldWidth'))
+        self.depthOfFieldNear.valueChanged.connect(functools.partial(self.api.render.set, 'depthOfFieldNear'))
+        self.depthOfFieldMid.valueChanged.connect(functools.partial(self.api.render.set, 'depthOfFieldMid'))
+        self.depthOfFieldFar.valueChanged.connect(functools.partial(self.api.render.set, 'depthOfFieldFar'))
+
+    def initializeInputs(self, api):
         self.api = api
         self.api.render.updated.connect(self.update)
         self.cameraMode = QLabel('')
@@ -200,86 +288,6 @@ class RenderWindow(QScrollArea):
         self.depthOfFieldMid.setRelativeStep(0.05)
         self.depthOfFieldFar = FloatInput(0, 100000)
         self.depthOfFieldFar.setRelativeStep(0.05)
-
-        self.cameraLockX.valueChanged.connect(self.api.render.toggleCameraLockX)
-        self.cameraLockY.valueChanged.connect(self.api.render.toggleCameraLockY)
-        self.cameraLockZ.valueChanged.connect(self.api.render.toggleCameraLockZ)
-        self.cameraPosition.valueChanged.connect(functools.partial(self.api.render.set, 'cameraPosition'))
-        self.cameraRotation.valueChanged.connect(functools.partial(self.api.render.set, 'cameraRotation'))
-        self.cameraAttached.valueChanged.connect(functools.partial(self.api.render.set, 'cameraAttached'))
-        self.cameraMoveSpeed.valueChanged.connect(functools.partial(self.api.render.set, 'cameraMoveSpeed'))
-        self.cameraLookSpeed.valueChanged.connect(functools.partial(self.api.render.set, 'cameraLookSpeed'))
-        self.fieldOfView.valueChanged.connect(functools.partial(self.api.render.set, 'fieldOfView'))
-        self.nearClip.valueChanged.connect(functools.partial(self.api.render.set, 'nearClip'))
-        self.farClip.valueChanged.connect(functools.partial(self.api.render.set, 'farClip'))
-        self.navGrid.valueChanged.connect(functools.partial(self.api.render.set, 'navGridOffset'))
-        self.skyboxes.activated.connect(lambda index: self.api.render.set('skyboxPath', self.skyboxes.itemData(index)))
-        self.skyboxRotation.valueChanged.connect(functools.partial(self.api.render.set, 'skyboxRotation'))
-        self.skyboxRadius.valueChanged.connect(functools.partial(self.api.render.set, 'skyboxRadius'))
-        self.skyboxOffset.valueChanged.connect(functools.partial(self.api.render.set, 'skyboxOffset'))
-        self.sunDirection.valueChanged.connect(functools.partial(self.api.render.set, 'sunDirection'))
-        self.depthFogEnabled.valueChanged.connect(functools.partial(self.api.render.set, 'depthFogEnabled'))
-        self.depthFogStart.valueChanged.connect(functools.partial(self.api.render.set, 'depthFogStart'))
-        self.depthFogEnd.valueChanged.connect(functools.partial(self.api.render.set, 'depthFogEnd'))
-        self.depthFogIntensity.valueChanged.connect(functools.partial(self.api.render.set, 'depthFogIntensity'))
-        self.depthFogColor.valueChanged.connect(functools.partial(self.api.render.set, 'depthFogColor'))
-        self.heightFogEnabled.valueChanged.connect(functools.partial(self.api.render.set, 'heightFogEnabled'))
-        self.heightFogStart.valueChanged.connect(functools.partial(self.api.render.set, 'heightFogStart'))
-        self.heightFogEnd.valueChanged.connect(functools.partial(self.api.render.set, 'heightFogEnd'))
-        self.heightFogIntensity.valueChanged.connect(functools.partial(self.api.render.set, 'heightFogIntensity'))
-        self.heightFogColor.valueChanged.connect(functools.partial(self.api.render.set, 'heightFogColor'))
-        self.depthOfFieldEnabled.valueChanged.connect(functools.partial(self.api.render.set, 'depthOfFieldEnabled'))
-        self.depthOfFieldDebug.valueChanged.connect(functools.partial(self.api.render.set, 'depthOfFieldDebug'))
-        self.depthOfFieldCircle.valueChanged.connect(functools.partial(self.api.render.set, 'depthOfFieldCircle'))
-        self.depthOfFieldWidth.valueChanged.connect(functools.partial(self.api.render.set, 'depthOfFieldWidth'))
-        self.depthOfFieldNear.valueChanged.connect(functools.partial(self.api.render.set, 'depthOfFieldNear'))
-        self.depthOfFieldMid.valueChanged.connect(functools.partial(self.api.render.set, 'depthOfFieldMid'))
-        self.depthOfFieldFar.valueChanged.connect(functools.partial(self.api.render.set, 'depthOfFieldFar'))
-
-        widget = QWidget()
-        layout = QFormLayout()
-        layout.addRow('Camera Mode', self.cameraMode)
-        layout.addRow('Camera Lock', HBoxWidget(self.cameraLockX, self.cameraLockY, self.cameraLockZ))
-        layout.addRow('Camera Position', self.cameraPosition)
-        layout.addRow('Camera Rotation', self.cameraRotation)
-        layout.addRow('Camera Attached', self.cameraAttached)
-        layout.addRow('Camera Move Speed', self.cameraMoveSpeed)
-        layout.addRow('Camera Look Speed', self.cameraLookSpeed)
-        layout.addRow('Field of View', self.fieldOfView)
-        layout.addRow('Near Clip', self.nearClip)
-        layout.addRow('Far Clip', self.farClip)
-        layout.addRow('Nav Grid Offset', self.navGrid)
-        layout.addRow(Separator())
-        layout.addRow('Skybox', self.skyboxes)
-        layout.addRow('Skybox Rotation', self.skyboxRotation)
-        layout.addRow('Skybox Offset', self.skyboxOffset)
-        layout.addRow('Skybox Radius', self.skyboxRadius)
-        layout.addRow('Sun Direction', self.sunDirection)
-        layout.addRow(Separator())
-        layout.addRow('Depth Fog', self.depthFogEnabled)
-        layout.addRow('Depth Fog Start', self.depthFogStart)
-        layout.addRow('Depth Fog End', self.depthFogEnd)
-        layout.addRow('Depth Fog Intensity', self.depthFogIntensity)
-        layout.addRow('Depth Fog Color', self.depthFogColor)
-        layout.addRow(Separator())
-        layout.addRow('Height Fog', self.heightFogEnabled)
-        layout.addRow('Height Fog Start', self.heightFogStart)
-        layout.addRow('Height Fog End', self.heightFogEnd)
-        layout.addRow('Height Fog Intensity', self.heightFogIntensity)
-        layout.addRow('Height Fog Color', self.heightFogColor)
-        layout.addRow(Separator())
-        layout.addRow('Depth of Field', self.depthOfFieldEnabled)
-        layout.addRow('Depth of Field Debug', self.depthOfFieldDebug)
-        layout.addRow('Depth of Field Circle', self.depthOfFieldCircle)
-        layout.addRow('Depth of Field Width', self.depthOfFieldWidth)
-        layout.addRow('Depth of Field Near', self.depthOfFieldNear)
-        layout.addRow('Depth of Field Mid', self.depthOfFieldMid)
-        layout.addRow('Depth of Field Far', self.depthOfFieldFar)
-        widget.setLayout(layout)
-        self.setWidgetResizable(True)
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setWidget(widget)
-        self.setWindowTitle('Rendering')
 
     def update(self):
         self.cameraLockX.update(self.api.render.cameraLockX is not None)
@@ -1061,8 +1069,7 @@ class LeagueDirector(object):
             ('kf_dof_width',                'Keyframe DOF Width',               ''),
             ('kf_dof_near',                 'Keyframe DOF Near',                ''),
             ('kf_dof_mid',                  'Keyframe DOF Mid',                 ''),
-            ('kf_dof_far',                  'Keyframe DOF Far',                 ''),
-        ])
+            ('kf_dof_far',                  'Keyframe DOF Far',                 ''),])
 
     def addWindow(self, widget, name):
         self.windows[name] = widget
@@ -1112,33 +1119,39 @@ class LeagueDirector(object):
 
     def loadTheme(self):
         palette = QPalette()
-        palette.setColor(QPalette.WindowText, QColor(180, 180, 180))
-        palette.setColor(QPalette.Foreground, QColor(180, 180, 180))
+        textForeground = QColor(180, 180, 180) # darker gray
+        disabledTextForeground = QColor(127, 127, 127) # gray
+
+        palette.setColor(QPalette.WindowText, textForeground)        
+        palette.setColor(QPalette.BrightText, textForeground)
+        palette.setColor(QPalette.ButtonText, textForeground)
+        palette.setColor(QPalette.Foreground, textForeground)
+        palette.setColor(QPalette.HighlightedText, textForeground)
+        palette.setColor(QPalette.PlaceholderText, textForeground)
+        palette.setColor(QPalette.ToolTipText, textForeground)
+
         palette.setColor(QPalette.Button, QColor(53, 53, 53))
         palette.setColor(QPalette.Light, QColor(80, 80, 80))
         palette.setColor(QPalette.Midlight, QColor(80, 80, 80))
         palette.setColor(QPalette.Mid, QColor(44, 44, 44))
         palette.setColor(QPalette.Dark, QColor(35, 35, 35))
         palette.setColor(QPalette.Text, QColor(190, 190, 190))
-        palette.setColor(QPalette.BrightText, QColor(180, 180, 180))
-        palette.setColor(QPalette.ButtonText, QColor(180, 180, 180))
         palette.setColor(QPalette.Base, QColor(42, 42, 42))
         palette.setColor(QPalette.Window, QColor(53, 53, 53))
         palette.setColor(QPalette.Background, QColor(53, 53, 53))
         palette.setColor(QPalette.Shadow, QColor(20, 20, 20))
         palette.setColor(QPalette.Highlight, QColor(110, 125, 190))
-        palette.setColor(QPalette.HighlightedText, QColor(180, 180, 180))
-        palette.setColor(QPalette.PlaceholderText, QColor(180, 180, 180))
         palette.setColor(QPalette.Link, QColor(56, 252, 196))
         palette.setColor(QPalette.AlternateBase, QColor(66, 66, 66))
         palette.setColor(QPalette.ToolTipBase, QColor(53, 53, 53))
-        palette.setColor(QPalette.ToolTipText, QColor(180, 180, 180))
-        palette.setColor(QPalette.Disabled, QPalette.WindowText, QColor(127, 127, 127))
-        palette.setColor(QPalette.Disabled, QPalette.Text, QColor(127, 127, 127))
-        palette.setColor(QPalette.Disabled, QPalette.ButtonText, QColor(127, 127, 127))
+
+
+        palette.setColor(QPalette.Disabled, QPalette.WindowText, disabledTextForeground)
+        palette.setColor(QPalette.Disabled, QPalette.Text, disabledTextForeground)
+        palette.setColor(QPalette.Disabled, QPalette.ButtonText, disabledTextForeground)
         palette.setColor(QPalette.Disabled, QPalette.Highlight, QColor(80, 80, 80))
-        palette.setColor(QPalette.Disabled, QPalette.HighlightedText, QColor(127, 127, 127))
-        palette.setColor(QPalette.Disabled, QPalette.PlaceholderText, QColor(127, 127, 127))
+        palette.setColor(QPalette.Disabled, QPalette.HighlightedText, disabledTextForeground)
+        palette.setColor(QPalette.Disabled, QPalette.PlaceholderText, disabledTextForeground)
         self.app.setPalette(palette)
         self.app.setStyle('Fusion')
 

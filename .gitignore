@@ -2,3 +2,6 @@
 *.DS_Store
 resources/skyboxes/*.dds
 build/out
+.vs/*
+slnx.sqlite
+slnx.sqlite-journal

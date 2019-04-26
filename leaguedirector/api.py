@@ -8,7 +8,6 @@ from leaguedirector.widgets import userpath
 from PySide2.QtCore import *
 from PySide2.QtNetwork import *
 
-
 class Resource(QObject):
     """
     Base class for a remote api resources.

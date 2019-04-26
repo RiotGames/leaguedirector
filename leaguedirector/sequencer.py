@@ -155,6 +155,15 @@ class SequenceKeyframe(QGraphicsPixmapItem):
 class SequenceTrack(QGraphicsRectItem):
     height = 22
 
+    def set_gradient(self):
+        self.gradient = QLinearGradient(QPointF(0, 0), QPointF(120 * PRECISION, 0))
+        self.gradient.setColorAt(0, QColor(30, 30, 30, 255))
+        self.gradient.setColorAt(0.49999999999999, QColor(30, 30, 30, 255))
+        self.gradient.setColorAt(0.5, QColor(40, 40, 40, 255))
+        self.gradient.setColorAt(1, QColor(40, 40, 40, 255))
+        self.gradient.setSpread(QGradient.RepeatSpread)
+        self.setBrush(QBrush(self.gradient))
+
     def __init__(self, api, name, index):
         QGraphicsRectItem.__init__(self)
         self.api = api
@@ -166,13 +175,7 @@ class SequenceTrack(QGraphicsRectItem):
         self.updateOverlapTimer = QTimer()
         self.updateOverlapTimer.timeout.connect(self.updateOverlapNow)
         self.updateOverlapTimer.setSingleShot(True)
-        self.gradient = QLinearGradient(QPointF(0, 0), QPointF(120 * PRECISION, 0))
-        self.gradient.setColorAt(0, QColor(30, 30, 30, 255))
-        self.gradient.setColorAt(0.49999999999999, QColor(30, 30, 30, 255))
-        self.gradient.setColorAt(0.5, QColor(40, 40, 40, 255))
-        self.gradient.setColorAt(1, QColor(40, 40, 40, 255))
-        self.gradient.setSpread(QGradient.RepeatSpread)
-        self.setBrush(QBrush(self.gradient))
+        self.set_gradient()
         self.reload()
         self.update()
 
