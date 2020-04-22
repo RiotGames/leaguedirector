@@ -9,6 +9,10 @@ from PySide2.QtCore import *
 from PySide2.QtNetwork import *
 
 
+'''
+maybe this one was a bit too much to use as my first one huh
+'''
+
 class Resource(QObject):
     """
     Base class for a remote api resources.
