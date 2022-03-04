@@ -90,6 +90,8 @@ class VisibleWindow(QScrollArea):
         ('interfaceTarget', 'show_interface_target', 'Show UI Target?'),
         ('interfaceQuests', 'show_interface_quests', 'Show UI Quests?'),
         ('interfaceAnnounce', 'show_interface_announce', 'Show UI Announcements?'),
+        ('interfaceKillCallouts', 'show_interface_killcallouts', 'Show Kill Callouts?'),
+        ('interfaceNeutralTimers', 'show_interface_neutraltimers', 'Show Neutral Timers?'),
         ('healthBarChampions', 'show_healthbar_champions', 'Show Health Champions?'),
         ('healthBarStructures', 'show_healthbar_structures', 'Show Health Structures?'),
         ('healthBarWards', 'show_healthbar_wards', 'Show Health Wards?'),
@@ -98,6 +100,7 @@ class VisibleWindow(QScrollArea):
         ('environment', 'show_environment', 'Show Environment?'),
         ('characters', 'show_characters', 'Show Characters?'),
         ('particles', 'show_particles', 'Show Particles?'),
+        ('banners', 'show_banners', 'Show Banners?'),
     ]
 
     def __init__(self, api):
