@@ -1,6 +1,6 @@
 [Setup]
 AppName=League Director
-AppVersion=0.1.1
+AppVersion=0.1.3
 AppVerName=League Director
 DisableDirPage=no
 DefaultDirName={pf}\League Director

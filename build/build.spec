@@ -4,12 +4,12 @@ from distutils.dir_util import copy_tree
 sys.modules['FixTk'] = None
 
 a = Analysis(['../leaguedirector/app.py'],
-    binaries = [('../resources/*.dll', '.')],
+    binaries = [],
     datas = [],
     hiddenimports = [],
     hookspath = [],
     runtime_hooks = [],
-    excludes = ['FixTk', 'tcl', 'tk', '_tkinter', 'tkinter', 'Tkinter', 'lib2to3'],
+    excludes = ['FixTk', 'tcl', 'tk', '_tkinter', 'tkinter', 'Tkinter', 'lib2to3', '_bootlocale'],
     win_no_prefer_redirects = False,
     win_private_assemblies = False,
     cipher = None,

@@ -1,11 +1,10 @@
 @echo off
 cd %~dp0
-set /p CODESIGN_CERT="CODESIGN_CERT: "
-set /p CODESIGN_PASS="CODESIGN_PASS: "
-pip install pipenv
+set /p CODESIGN_TOKEN="CODESIGN_TOKEN: "
+pip install pipenv==2022.3.24
 pipenv install --skip-lock
-pipenv run pip install pyinstaller==3.4
+pipenv run pip install pyinstaller==4.10
 pipenv run pyinstaller build.spec --noconfirm --workpath=out/build --distpath=out/dist
-signtool.exe sign /f "%CODESIGN_CERT%" /p "%CODESIGN_PASS%" /t http://timestamp.digicert.com out\dist\LeagueDirector\LeagueDirector.exe
+autograph.exe digestsign --signtool signtool.exe --artifact out\dist\LeagueDirector\LeagueDirector.exe --certificate riot_ev --token %CODESIGN_TOKEN% --crossCertificate digicert_ev_x_cert --verify
 ISCC.exe install.iss
-signtool.exe sign /f "%CODESIGN_CERT%" /p "%CODESIGN_PASS%" /t http://timestamp.digicert.com out\LeagueDirectorSetup.exe
+autograph.exe digestsign --signtool signtool.exe --artifact out\LeagueDirectorSetup.exe --certificate riot_ev --token %CODESIGN_TOKEN% --crossCertificate digicert_ev_x_cert --verify

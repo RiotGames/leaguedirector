@@ -23,9 +23,9 @@ class Resource(QObject):
     network     = None
 
     def __init__(self):
-        object.__setattr__(self, 'timestamp', time.time())
+        super(Resource, self).__setattr__('timestamp', time.time())
         for name, default in self.fields.items():
-            object.__setattr__(self, name, default)
+            super(Resource, self).__setattr__(name, default)
         QObject.__init__(self)
 
     def __setattr__(self, name, value):
@@ -33,10 +33,10 @@ class Resource(QObject):
             if self.readonly:
                 raise AttributeError("Resource is readonly")
             if getattr(self, name) != value:
-                object.__setattr__(self, name, value)
+                super(Resource, self).__setattr__(name, value)
                 self.update({name: value})
         else:
-            object.__setattr__(self, name, value)
+            super(Resource, self).__setattr__(name, value)
 
     def sslErrors(self, response, errors):
         allowed = [QSslError.CertificateUntrusted, QSslError.HostNameMismatch]
@@ -54,7 +54,7 @@ class Resource(QObject):
         return Resource.network
 
     def set(self, name, value):
-        self.__setattr__(name, value)
+        super(Resource, self).__setattr__(name, value)
 
     def get(self, name):
         return getattr(self, name)
@@ -93,7 +93,7 @@ class Resource(QObject):
         if not self.writeonly:
             for key, value in data.items():
                 if key in self.fields:
-                    object.__setattr__(self, key, value)
+                    super(Resource, self).__setattr__(key, value)
 
 
 class Game(Resource):
@@ -507,7 +507,7 @@ class Sequence(Resource):
         if isinstance(data, dict):
             for key, value in data.items():
                 if value is not None:
-                    object.__setattr__(self, key, value)
+                    super(Resource, self).__setattr__(key, value)
             self.dataLoaded.emit()
 
     def sortData(self):

@@ -2,3 +2,5 @@
 *.DS_Store
 resources/skyboxes/*.dds
 build/out
+build/autograph*
+build/signtool*
