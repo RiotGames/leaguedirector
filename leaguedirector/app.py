@@ -938,6 +938,7 @@ class LeagueDirector(object):
         logger.addHandler(handler)
         logger.setLevel(logging.INFO)
         logging.info('Started League Director (%s)', leaguedirector.__version__)
+        logging.info('Using SSL (%s)', QSslSocket.sslLibraryVersionString())
         qInstallMessageHandler(self.handleMessage)
 
     def checkUpdate(self):
