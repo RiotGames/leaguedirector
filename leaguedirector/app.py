@@ -5,10 +5,10 @@ import functools
 import logging
 import logging.handlers
 import leaguedirector
-from PySide2.QtGui import *
-from PySide2.QtCore import *
-from PySide2.QtWidgets import *
-from PySide2.QtNetwork import *
+from PySide6.QtGui import *
+from PySide6.QtCore import *
+from PySide6.QtWidgets import *
+from PySide6.QtNetwork import *
 from leaguedirector.widgets import *
 from leaguedirector.sequencer import *
 from leaguedirector.enable import *
@@ -887,7 +887,7 @@ class LeagueDirector(object):
         self.setupLogging()
         self.app = QApplication()
         self.setup()
-        sys.exit(self.app.exec_())
+        sys.exit(self.app.exec())
 
     def setup(self):
         self.loadTheme()
@@ -1115,33 +1115,31 @@ class LeagueDirector(object):
 
     def loadTheme(self):
         palette = QPalette()
-        palette.setColor(QPalette.WindowText, QColor(180, 180, 180))
-        palette.setColor(QPalette.Foreground, QColor(180, 180, 180))
-        palette.setColor(QPalette.Button, QColor(53, 53, 53))
-        palette.setColor(QPalette.Light, QColor(80, 80, 80))
-        palette.setColor(QPalette.Midlight, QColor(80, 80, 80))
-        palette.setColor(QPalette.Mid, QColor(44, 44, 44))
-        palette.setColor(QPalette.Dark, QColor(35, 35, 35))
-        palette.setColor(QPalette.Text, QColor(190, 190, 190))
-        palette.setColor(QPalette.BrightText, QColor(180, 180, 180))
-        palette.setColor(QPalette.ButtonText, QColor(180, 180, 180))
-        palette.setColor(QPalette.Base, QColor(42, 42, 42))
-        palette.setColor(QPalette.Window, QColor(53, 53, 53))
-        palette.setColor(QPalette.Background, QColor(53, 53, 53))
-        palette.setColor(QPalette.Shadow, QColor(20, 20, 20))
-        palette.setColor(QPalette.Highlight, QColor(110, 125, 190))
-        palette.setColor(QPalette.HighlightedText, QColor(180, 180, 180))
-        palette.setColor(QPalette.PlaceholderText, QColor(180, 180, 180))
-        palette.setColor(QPalette.Link, QColor(56, 252, 196))
-        palette.setColor(QPalette.AlternateBase, QColor(66, 66, 66))
-        palette.setColor(QPalette.ToolTipBase, QColor(53, 53, 53))
-        palette.setColor(QPalette.ToolTipText, QColor(180, 180, 180))
-        palette.setColor(QPalette.Disabled, QPalette.WindowText, QColor(127, 127, 127))
-        palette.setColor(QPalette.Disabled, QPalette.Text, QColor(127, 127, 127))
-        palette.setColor(QPalette.Disabled, QPalette.ButtonText, QColor(127, 127, 127))
-        palette.setColor(QPalette.Disabled, QPalette.Highlight, QColor(80, 80, 80))
-        palette.setColor(QPalette.Disabled, QPalette.HighlightedText, QColor(127, 127, 127))
-        palette.setColor(QPalette.Disabled, QPalette.PlaceholderText, QColor(127, 127, 127))
+        palette.setColor(QPalette.ColorRole.WindowText, QColor(180, 180, 180))
+        palette.setColor(QPalette.ColorRole.Button, QColor(53, 53, 53))
+        palette.setColor(QPalette.ColorRole.Light, QColor(80, 80, 80))
+        palette.setColor(QPalette.ColorRole.Midlight, QColor(80, 80, 80))
+        palette.setColor(QPalette.ColorRole.Mid, QColor(44, 44, 44))
+        palette.setColor(QPalette.ColorRole.Dark, QColor(35, 35, 35))
+        palette.setColor(QPalette.ColorRole.Text, QColor(190, 190, 190))
+        palette.setColor(QPalette.ColorRole.BrightText, QColor(180, 180, 180))
+        palette.setColor(QPalette.ColorRole.ButtonText, QColor(180, 180, 180))
+        palette.setColor(QPalette.ColorRole.Base, QColor(42, 42, 42))
+        palette.setColor(QPalette.ColorRole.Window, QColor(53, 53, 53))
+        palette.setColor(QPalette.ColorRole.Shadow, QColor(20, 20, 20))
+        palette.setColor(QPalette.ColorRole.Highlight, QColor(110, 125, 190))
+        palette.setColor(QPalette.ColorRole.HighlightedText, QColor(180, 180, 180))
+        palette.setColor(QPalette.ColorRole.PlaceholderText, QColor(180, 180, 180))
+        palette.setColor(QPalette.ColorRole.Link, QColor(56, 252, 196))
+        palette.setColor(QPalette.ColorRole.AlternateBase, QColor(66, 66, 66))
+        palette.setColor(QPalette.ColorRole.ToolTipBase, QColor(53, 53, 53))
+        palette.setColor(QPalette.ColorRole.ToolTipText, QColor(180, 180, 180))
+        palette.setColor(QPalette.ColorGroup.Disabled, QPalette.ColorRole.WindowText, QColor(127, 127, 127))
+        palette.setColor(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Text, QColor(127, 127, 127))
+        palette.setColor(QPalette.ColorGroup.Disabled, QPalette.ColorRole.ButtonText, QColor(127, 127, 127))
+        palette.setColor(QPalette.ColorGroup.Disabled, QPalette.ColorRole.Highlight, QColor(80, 80, 80))
+        palette.setColor(QPalette.ColorGroup.Disabled, QPalette.ColorRole.HighlightedText, QColor(127, 127, 127))
+        palette.setColor(QPalette.ColorGroup.Disabled, QPalette.ColorRole.PlaceholderText, QColor(127, 127, 127))
         self.app.setPalette(palette)
         self.app.setStyle('Fusion')
 

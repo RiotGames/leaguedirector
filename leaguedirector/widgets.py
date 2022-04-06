@@ -1,7 +1,7 @@
 import os
-from PySide2.QtGui import *
-from PySide2.QtCore import *
-from PySide2.QtWidgets import *
+from PySide6.QtGui import *
+from PySide6.QtCore import *
+from PySide6.QtWidgets import *
 
 
 def schedule(interval, callback):
@@ -43,7 +43,7 @@ class HBoxWidget(QWidget):
     def __init__(self, *widgets):
         QWidget.__init__(self)
         self.layout = QHBoxLayout()
-        self.layout.setMargin(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)
         for widget in widgets:
             self.addWidget(widget)
@@ -56,7 +56,7 @@ class VBoxWidget(QWidget):
     def __init__(self, *widgets):
         QWidget.__init__(self)
         self.layout = QVBoxLayout()
-        self.layout.setMargin(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)
         for widget in widgets:
             self.addWidget(widget)
@@ -82,7 +82,7 @@ class FloatSlider(QWidget):
         self.input.valueChanged.connect(self.inputValueChanged)
 
         self.layout = QHBoxLayout()
-        self.layout.setMargin(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.label)
         self.layout.addWidget(self.slider)
         self.layout.addWidget(self.input)
@@ -133,7 +133,7 @@ class FloatInput(QWidget):
         self.spin = QDoubleSpinBox()
         self.spin.valueChanged.connect(self.handleValueChanged)
         self.layout = QHBoxLayout()
-        self.layout.setMargin(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.spin)
         self.setLayout(self.layout)
         self.setRange(default(min_value, float('-inf')), default(max_value, float('inf')))
@@ -195,7 +195,7 @@ class BooleanInput(QWidget):
         self.checkbox.stateChanged.connect(self.handleValueChanged)
         self.label = QLabel('')
         self.layout = QHBoxLayout()
-        self.layout.setMargin(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.checkbox)
         self.layout.addWidget(self.label)
         self.setLayout(self.layout)
@@ -238,7 +238,7 @@ class VectorInput(QWidget):
         self.y.valueChanged.connect(self.handleValueChanged)
         self.z.valueChanged.connect(self.handleValueChanged)
         self.layout = QHBoxLayout()
-        self.layout.setMargin(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.x)
         self.layout.addWidget(self.y)
         self.layout.addWidget(self.z)
@@ -341,7 +341,7 @@ class ColorInput(QWidget):
         self.dialog.currentColorChanged.connect(self.handleColorPicked)
         self.button.clicked.connect(self.dialog.show)
         self.layout = QHBoxLayout()
-        self.layout.setMargin(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.addWidget(self.r)
         self.layout.addWidget(self.g)
         self.layout.addWidget(self.b)

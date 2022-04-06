@@ -1,7 +1,7 @@
 ## League Director
 [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://github.com/riotgames/leaguedirector/blob/master/LICENSE)
-[![Python](https://img.shields.io/badge/python-3.7-brightgreen.svg)](https://www.python.org/downloads/release/python-372/)
-[![Qt](https://img.shields.io/badge/pyside2-5.12.0-brightgreen.svg)](https://www.qt.io/qt-for-python)
+[![Python](https://img.shields.io/badge/python-3.10-brightgreen.svg)](https://www.python.org/downloads/release/python-372/)
+[![Qt](https://img.shields.io/badge/pyside6-6.2.4-brightgreen.svg)](https://www.qt.io/qt-for-python)
 [![Chat](https://img.shields.io/badge/chat-on%20discord-lightgrey.svg)](https://discord.gg/7j5fdRp)
 
 League Director is a tool for staging and recording videos from League of Legends replays. **[Download Latest Release](https://github.com/riotgames/leaguedirector/releases/latest)**
@@ -68,7 +68,7 @@ EnableReplayApi=1
 If the option is already listed make sure it is set to 1. If the option is not listed at all just add it to the bottom of the list. You will need to restart the replay after changing this value for it to take effect.
 
 ## Developing
-To run the source version of this application you need the [latest 3.7.2 version](https://www.python.org/downloads/release/python-372/)  of Python installed. From the windows command line:
+To run the source version of this application you need the [latest 3.10.4 version](https://www.python.org/downloads/)  of Python installed. From the windows command line:
 
 ```
 # Clone this repository

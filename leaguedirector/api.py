@@ -5,8 +5,8 @@ import copy
 import logging
 import functools
 from leaguedirector.widgets import userpath
-from PySide2.QtCore import *
-from PySide2.QtNetwork import *
+from PySide6.QtCore import *
+from PySide6.QtNetwork import *
 
 
 class Resource(QObject):
@@ -48,7 +48,9 @@ class Resource(QObject):
             os.environ['PATH'] = os.path.abspath('resources') + os.pathsep + os.environ['PATH']
 
             # Then setup our certificate for the lol game client
-            QSslSocket.addDefaultCaCertificates(os.path.abspath('resources/riotgames.pem'))
+            configuration = QSslConfiguration.defaultConfiguration()
+            configuration.addCaCertificates(QSslCertificate.fromPath(os.path.abspath('resources/riotgames.pem')))
+            QSslConfiguration.setDefaultConfiguration(configuration)
             Resource.network = QNetworkAccessManager(QCoreApplication.instance())
             Resource.network.sslErrors.connect(self.sslErrors)
         return Resource.network
