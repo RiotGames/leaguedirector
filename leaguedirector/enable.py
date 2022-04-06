@@ -82,13 +82,13 @@ def configFilePath(path):
     path = os.path.abspath(path)
     if platform.system() == 'Darwin':
         path = os.path.join(path, 'Contents', 'LoL')
+    config = os.path.join(path, 'DATA', 'CFG', 'game.cfg')
+    if os.path.isfile(config):
+        return config
     config = os.path.join(path, 'Config', 'game.cfg')
     if os.path.isfile(config):
         return config
     config = os.path.join(path, 'Game', 'Config', 'game.cfg')
-    if os.path.isfile(config):
-        return config
-    config = os.path.join(path, 'DATA', 'CFG', 'game.cfg')
     if os.path.isfile(config):
         return config
 
