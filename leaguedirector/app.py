@@ -365,7 +365,7 @@ class ParticlesWindow(VBoxWidget):
                 self.list.addItem(item)
                 self.items[particle] = item
             self.items[particle].setCheckState(Qt.Checked if enabled else Qt.Unchecked)
-        for particle in self.items.keys():
+        for particle in list(self.items):
             if not self.api.particles.hasParticle(particle):
                 self.list.removeItemWidget(self.items.pop(particle))
 

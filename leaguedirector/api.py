@@ -56,7 +56,7 @@ class Resource(QObject):
         return Resource.network
 
     def set(self, name, value):
-        super(Resource, self).__setattr__(name, value)
+        self.__setattr__(name, value)
 
     def get(self, name):
         return getattr(self, name)
@@ -68,7 +68,7 @@ class Resource(QObject):
         return {name: getattr(self, name) for name in self.fields}
 
     def keys(self):
-        return self.fields.keys()
+        return list(self.fields)
 
     def update(self, data=None):
         request = QNetworkRequest(QUrl(self.host + self.url))
