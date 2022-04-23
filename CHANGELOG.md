@@ -2,6 +2,8 @@
  - Upgrade to Qt 6
  - Upgrade to Python 3.10
  - Upgrade to psutil 5.9.0
+ - Fixes an issue with key bindings when league is the front most window
+ - Fixes an issue searching for league installs
  - Republish with correct version number
 
 ## 0.1.2
