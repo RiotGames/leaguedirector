@@ -283,7 +283,7 @@ class RenderWindow(QScrollArea):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setWidget(widget)
         self.setWindowTitle('Rendering')
-
+       
     def update(self):
         self.cameraLockX.update(self.api.render.cameraLockX is not None)
         self.cameraLockY.update(self.api.render.cameraLockY is not None)
@@ -324,7 +324,33 @@ class RenderWindow(QScrollArea):
         self.depthOfFieldNear.update(self.api.render.depthOfFieldNear)
         self.depthOfFieldMid.update(self.api.render.depthOfFieldMid)
         self.depthOfFieldFar.update(self.api.render.depthOfFieldFar)
-
+        self.fieldOfView.setValue(48)
+        self.depthFogEnabled.setValue(True)
+        self.depthFogStart.setValue(61.92)
+        self.depthFogEnd.setValue(1205.04)
+        self.depthFogIntensity.setValue(0.05)
+        self.depthFogColor.setValue({
+    'r': 255 / 255.0,
+    'g': 152 / 255.0,
+    'b': 25 / 255.0,
+    'a': 255 / 255.0
+})
+        self.heightFogEnabled.setValue(True)
+        self.heightFogStart.setValue(100)
+        self.heightFogEnd.setValue(610)
+        self.heightFogIntensity.setValue(0.15)
+        self.heightFogColor.setValue({
+    'r': 120 / 255.0,
+    'g': 66 / 255.0,
+    'b': 255 / 255.0,
+    'a': 255 / 255.0
+})
+        self.depthOfFieldEnabled.setValue(True)
+        self.depthOfFieldCircle.setValue(21)
+        self.depthOfFieldWidth.setValue(200)
+        self.depthOfFieldNear.setValue(12)
+        self.depthOfFieldMid.setValue(2101.39)
+        self.depthOfFieldFar.setValue(5455.30)
 
 class ParticlesWindow(VBoxWidget):
     def __init__(self, api):
