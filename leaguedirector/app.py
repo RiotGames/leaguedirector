@@ -131,6 +131,32 @@ class VisibleWindow(QScrollArea):
     def update(self):
         for name, field in self.inputs.items():
             field.setValue(self.api.render.get(name))
+        self.inputs["fogOfWar"].setValue(False)
+        self.inputs["outlineSelect"].setValue(True)
+        self.inputs["outlineHover"].setValue(True)
+        self.inputs["floatingText"].setValue(False)
+        self.inputs["interfaceAll"].setValue(True)
+        self.inputs["interfaceReplay"].setValue(False)
+        self.inputs["interfaceScore"].setValue(False)
+        self.inputs["interfaceScoreboard"].setValue(False)
+        self.inputs["interfaceFrames"].setValue(False)
+        self.inputs["interfaceMinimap"].setValue(False)
+        self.inputs["interfaceTimeline"].setValue(False)
+        self.inputs["interfaceChat"].setValue(False)
+        self.inputs["interfaceTarget"].setValue(False)
+        self.inputs["interfaceQuests"].setValue(False)
+        self.inputs["interfaceAnnounce"].setValue(True)
+        self.inputs["interfaceKillCallouts"].setValue(True)
+        self.inputs["interfaceNeutralTimers"].setValue(False)
+        self.inputs["healthBarChampions"].setValue(True)
+        self.inputs["healthBarStructures"].setValue(True)
+        self.inputs["healthBarWards"].setValue(True)
+        self.inputs["healthBarPets"].setValue(True)
+        self.inputs["healthBarMinions"].setValue(True)
+        self.inputs["environment"].setValue(True)
+        self.inputs["characters"].setValue(True)
+        self.inputs["particles"].setValue(True)
+        self.inputs["banners"].setValue(True)
 
     def restoreSettings(self, data):
         for name, value in data.items():
