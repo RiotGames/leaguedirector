@@ -29,6 +29,7 @@ League Director is a tool for staging and recording videos from League of Legend
   - Adjustable keyframe blending
 * Video capture in webm or png format
 * Customizable key bindings
+* Config save and load features
 
 ## How To Use
 
