@@ -131,32 +131,32 @@ class VisibleWindow(QScrollArea):
     def update(self):
         for name, field in self.inputs.items():
             field.setValue(self.api.render.get(name))
-        self.inputs["fogOfWar"].setValue(False)
-        self.inputs["outlineSelect"].setValue(True)
-        self.inputs["outlineHover"].setValue(True)
-        self.inputs["floatingText"].setValue(False)
-        self.inputs["interfaceAll"].setValue(True)
-        self.inputs["interfaceReplay"].setValue(False)
-        self.inputs["interfaceScore"].setValue(False)
-        self.inputs["interfaceScoreboard"].setValue(False)
-        self.inputs["interfaceFrames"].setValue(False)
-        self.inputs["interfaceMinimap"].setValue(False)
-        self.inputs["interfaceTimeline"].setValue(False)
-        self.inputs["interfaceChat"].setValue(False)
-        self.inputs["interfaceTarget"].setValue(False)
-        self.inputs["interfaceQuests"].setValue(False)
-        self.inputs["interfaceAnnounce"].setValue(True)
-        self.inputs["interfaceKillCallouts"].setValue(True)
-        self.inputs["interfaceNeutralTimers"].setValue(False)
-        self.inputs["healthBarChampions"].setValue(True)
-        self.inputs["healthBarStructures"].setValue(True)
-        self.inputs["healthBarWards"].setValue(True)
-        self.inputs["healthBarPets"].setValue(True)
-        self.inputs["healthBarMinions"].setValue(True)
-        self.inputs["environment"].setValue(True)
-        self.inputs["characters"].setValue(True)
-        self.inputs["particles"].setValue(True)
-        self.inputs["banners"].setValue(True)
+        # self.inputs["fogOfWar"].setValue(False)
+        # self.inputs["outlineSelect"].setValue(True)
+        # self.inputs["outlineHover"].setValue(True)
+        # self.inputs["floatingText"].setValue(False)
+        # self.inputs["interfaceAll"].setValue(True)
+        # self.inputs["interfaceReplay"].setValue(False)
+        # self.inputs["interfaceScore"].setValue(False)
+        # self.inputs["interfaceScoreboard"].setValue(False)
+        # self.inputs["interfaceFrames"].setValue(False)
+        # self.inputs["interfaceMinimap"].setValue(False)
+        # self.inputs["interfaceTimeline"].setValue(False)
+        # self.inputs["interfaceChat"].setValue(False)
+        # self.inputs["interfaceTarget"].setValue(False)
+        # self.inputs["interfaceQuests"].setValue(False)
+        # self.inputs["interfaceAnnounce"].setValue(True)
+        # self.inputs["interfaceKillCallouts"].setValue(True)
+        # self.inputs["interfaceNeutralTimers"].setValue(False)
+        # self.inputs["healthBarChampions"].setValue(True)
+        # self.inputs["healthBarStructures"].setValue(True)
+        # self.inputs["healthBarWards"].setValue(True)
+        # self.inputs["healthBarPets"].setValue(True)
+        # self.inputs["healthBarMinions"].setValue(True)
+        # self.inputs["environment"].setValue(True)
+        # self.inputs["characters"].setValue(True)
+        # self.inputs["particles"].setValue(True)
+        # self.inputs["banners"].setValue(True)
 
     def restoreSettings(self, data):
         for name, value in data.items():
@@ -350,33 +350,33 @@ class RenderWindow(QScrollArea):
         self.depthOfFieldNear.update(self.api.render.depthOfFieldNear)
         self.depthOfFieldMid.update(self.api.render.depthOfFieldMid)
         self.depthOfFieldFar.update(self.api.render.depthOfFieldFar)
-        self.fieldOfView.setValue(48)
-        self.depthFogEnabled.setValue(True)
-        self.depthFogStart.setValue(61.92)
-        self.depthFogEnd.setValue(1205.04)
-        self.depthFogIntensity.setValue(0.05)
-        self.depthFogColor.setValue({
-    'r': 255 / 255.0,
-    'g': 152 / 255.0,
-    'b': 25 / 255.0,
-    'a': 255 / 255.0
-})
-        self.heightFogEnabled.setValue(True)
-        self.heightFogStart.setValue(100)
-        self.heightFogEnd.setValue(610)
-        self.heightFogIntensity.setValue(0.15)
-        self.heightFogColor.setValue({
-    'r': 120 / 255.0,
-    'g': 66 / 255.0,
-    'b': 255 / 255.0,
-    'a': 255 / 255.0
-})
-        self.depthOfFieldEnabled.setValue(True)
-        self.depthOfFieldCircle.setValue(21)
-        self.depthOfFieldWidth.setValue(200)
-        self.depthOfFieldNear.setValue(12)
-        self.depthOfFieldMid.setValue(2101.39)
-        self.depthOfFieldFar.setValue(5455.30)
+#         self.fieldOfView.setValue(48)
+#         self.depthFogEnabled.setValue(True)
+#         self.depthFogStart.setValue(61.92)
+#         self.depthFogEnd.setValue(1205.04)
+#         self.depthFogIntensity.setValue(0.05)
+#         self.depthFogColor.setValue({
+#     'r': 255 / 255.0,
+#     'g': 152 / 255.0,
+#     'b': 25 / 255.0,
+#     'a': 255 / 255.0
+# })
+#         self.heightFogEnabled.setValue(True)
+#         self.heightFogStart.setValue(100)
+#         self.heightFogEnd.setValue(610)
+#         self.heightFogIntensity.setValue(0.15)
+#         self.heightFogColor.setValue({
+#     'r': 120 / 255.0,
+#     'g': 66 / 255.0,
+#     'b': 255 / 255.0,
+#     'a': 255 / 255.0
+# })
+#         self.depthOfFieldEnabled.setValue(True)
+#         self.depthOfFieldCircle.setValue(21)
+#         self.depthOfFieldWidth.setValue(200)
+#         self.depthOfFieldNear.setValue(12)
+#         self.depthOfFieldMid.setValue(2101.39)
+#         self.depthOfFieldFar.setValue(5455.30)
 
 class ParticlesWindow(VBoxWidget):
     def __init__(self, api):
@@ -535,6 +535,110 @@ class RecordingWindow(VBoxWidget):
 
     def restoreSettings(self, data):
         self.setOutputDirectory(data.get('output', self.outputPath))
+
+
+class Configs(VBoxWidget):
+    def __init__(self, api):
+        VBoxWidget.__init__(self)
+        self.api = api
+
+        self.outputPath = userpath('configs')
+        self.outputLabel = QLabel()
+        self.outputLabel.setTextFormat(Qt.RichText)
+        self.outputLabel.setTextInteractionFlags(Qt.TextBrowserInteraction)
+        self.outputLabel.setOpenExternalLinks(True)
+
+        self.outputButton = QPushButton()
+        self.outputButton.setToolTip('Change Save Directory')
+        self.outputButton.setFixedWidth(30)
+        self.outputButton.setIcon(self.style().standardIcon(QStyle.SP_FileDialogStart))
+        self.outputButton.clicked.connect(self.selectOutputDirectory)
+
+        self.button = QPushButton('Load Config')
+        self.button.clicked.connect(self.loadConfig)
+        self.button2 = QPushButton('Save Config')
+        self.button2.clicked.connect(self.saveConfig)
+        self.list = QListWidget()
+        self.list.setSortingEnabled(True)
+        self.list.itemDoubleClicked.connect(self.loadConfig)
+
+        self.form = QWidget(self)
+        self.formLayout = QFormLayout(self.form)
+        self.formLayout.addRow('Output Directory', HBoxWidget(self.outputButton, self.outputLabel))
+        self.formLayout.addRow(HBoxWidget(self.button,self.button2))
+        self.formLayout.addRow(self.list)
+        self.form.setLayout(self.formLayout)
+
+        self.render = QWidget(self)
+      
+
+        self.addWidget(self.form)
+        self.addWidget(self.render)
+        self.setWindowTitle('Configs')
+
+    def update(self):
+        self.list.clear()
+        file_paths = [os.path.join(self.outputPath, file_name) for file_name in os.listdir(self.outputPath) if file_name.endswith('.json')]
+
+
+        for file_path in file_paths:
+            self.list.addItem(file_path)
+
+    def selectOutputDirectory(self):
+        self.setOutputDirectory(QFileDialog.getExistingDirectory(self, 'Select Save Directory', self.outputPath))
+
+    def chooseConfig(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        file_path, _ = QFileDialog.getOpenFileName(None, "Choose Config File", self.outputPath, "JSON Files (*.json);;All Files (*)", options=options)
+        return file_path
+
+    def loadConfig(self,item):
+        if not item:
+            file_path = self.chooseConfig()
+        else:
+            file_path = item.text()
+
+        if file_path:
+            try:
+                with open(file_path, 'r') as file:
+                    json_data = json.load(file)
+                    
+                    self.api.render.update(json_data)
+                   
+            except Exception as e:
+                QMessageBox.critical(None, "Error", e)
+
+        self.update()
+
+    def setOutputDirectory(self, path):
+        if os.path.exists(path):
+            self.outputPath = path
+            self.outputLabel.setText("<a href=\"file:///{}\">{}</a>".format(path, path))
+        self.update()
+
+    def saveConfig(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        suggested_file_name = "config.json"
+        file_path, _ = QFileDialog.getSaveFileName(None, "Save Config File", os.path.join(self.outputPath,suggested_file_name), "JSON Files (*.json);;All Files (*)", options=options)
+
+
+        if file_path:
+            try:
+                with open(file_path, 'w') as file:
+                    json.dump(self.api.render.data(), file, indent=4)
+                
+            except Exception as e:
+                QMessageBox.critical(None, "Error", e)
+
+        self.update()
+
+    def saveSettings(self):
+        return {'outputConfig': self.outputPath}
+
+    def restoreSettings(self, data):
+        self.setOutputDirectory(data.get('outputConfig', self.outputPath))
 
 
 class TimelineWindow(QWidget):
@@ -954,6 +1058,7 @@ class LeagueDirector(object):
         self.addWindow(VisibleWindow(self.api), 'visible')
         self.addWindow(TimelineWindow(self.api), 'timeline')
         self.addWindow(RecordingWindow(self.api), 'recording')
+        self.addWindow(Configs(self.api), 'configs')
         self.addWindow(KeybindingsWindow(self.bindings), 'bindings')
         self.addWindow(ConnectWindow(), 'connect')
         self.addWindow(UpdateWindow(), 'update')
