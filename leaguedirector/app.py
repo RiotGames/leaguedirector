@@ -131,32 +131,6 @@ class VisibleWindow(QScrollArea):
     def update(self):
         for name, field in self.inputs.items():
             field.setValue(self.api.render.get(name))
-        # self.inputs["fogOfWar"].setValue(False)
-        # self.inputs["outlineSelect"].setValue(True)
-        # self.inputs["outlineHover"].setValue(True)
-        # self.inputs["floatingText"].setValue(False)
-        # self.inputs["interfaceAll"].setValue(True)
-        # self.inputs["interfaceReplay"].setValue(False)
-        # self.inputs["interfaceScore"].setValue(False)
-        # self.inputs["interfaceScoreboard"].setValue(False)
-        # self.inputs["interfaceFrames"].setValue(False)
-        # self.inputs["interfaceMinimap"].setValue(False)
-        # self.inputs["interfaceTimeline"].setValue(False)
-        # self.inputs["interfaceChat"].setValue(False)
-        # self.inputs["interfaceTarget"].setValue(False)
-        # self.inputs["interfaceQuests"].setValue(False)
-        # self.inputs["interfaceAnnounce"].setValue(True)
-        # self.inputs["interfaceKillCallouts"].setValue(True)
-        # self.inputs["interfaceNeutralTimers"].setValue(False)
-        # self.inputs["healthBarChampions"].setValue(True)
-        # self.inputs["healthBarStructures"].setValue(True)
-        # self.inputs["healthBarWards"].setValue(True)
-        # self.inputs["healthBarPets"].setValue(True)
-        # self.inputs["healthBarMinions"].setValue(True)
-        # self.inputs["environment"].setValue(True)
-        # self.inputs["characters"].setValue(True)
-        # self.inputs["particles"].setValue(True)
-        # self.inputs["banners"].setValue(True)
 
     def restoreSettings(self, data):
         for name, value in data.items():
@@ -350,33 +324,6 @@ class RenderWindow(QScrollArea):
         self.depthOfFieldNear.update(self.api.render.depthOfFieldNear)
         self.depthOfFieldMid.update(self.api.render.depthOfFieldMid)
         self.depthOfFieldFar.update(self.api.render.depthOfFieldFar)
-#         self.fieldOfView.setValue(48)
-#         self.depthFogEnabled.setValue(True)
-#         self.depthFogStart.setValue(61.92)
-#         self.depthFogEnd.setValue(1205.04)
-#         self.depthFogIntensity.setValue(0.05)
-#         self.depthFogColor.setValue({
-#     'r': 255 / 255.0,
-#     'g': 152 / 255.0,
-#     'b': 25 / 255.0,
-#     'a': 255 / 255.0
-# })
-#         self.heightFogEnabled.setValue(True)
-#         self.heightFogStart.setValue(100)
-#         self.heightFogEnd.setValue(610)
-#         self.heightFogIntensity.setValue(0.15)
-#         self.heightFogColor.setValue({
-#     'r': 120 / 255.0,
-#     'g': 66 / 255.0,
-#     'b': 255 / 255.0,
-#     'a': 255 / 255.0
-# })
-#         self.depthOfFieldEnabled.setValue(True)
-#         self.depthOfFieldCircle.setValue(21)
-#         self.depthOfFieldWidth.setValue(200)
-#         self.depthOfFieldNear.setValue(12)
-#         self.depthOfFieldMid.setValue(2101.39)
-#         self.depthOfFieldFar.setValue(5455.30)
 
 class ParticlesWindow(VBoxWidget):
     def __init__(self, api):
