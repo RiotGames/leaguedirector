@@ -35,7 +35,7 @@ League Director is a tool for staging and recording videos from League of Legend
 
 **Note: Windows Only**
 
-1. **[Download League Director](https://github.com/riotgames/leaguedirector/releases/latest)** from the releases page and install.
+1. **[Download League Director](https://github.com/jubstaaa/leaguedirector/releases/latest)** from the releases page and install.
 2. Start League Director and make sure the checkbox next to your install is checked.
 3. Start League of Legends and launch a replay. League Director will automatically connect.
 4. Open the options menu (ESC key) in game and ensure your Video Graphics settings are set to Very High. If you did need to change your Video Graphics settings, you'll need to restart the replay to enable the additional rendering features like the skybox.
