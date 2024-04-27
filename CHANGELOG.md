@@ -1,4 +1,4 @@
-## 0.1.14
+## 0.1.4
  - Upgrade to Qt 6.6.3.1
  - Upgrade to Python 3.11.9
  - Upgrade to psutil 5.9.8
