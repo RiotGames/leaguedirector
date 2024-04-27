@@ -25,8 +25,8 @@ def findWindowsRunning(paths):
         path = process.info['exe']
         if name == 'leagueclient.exe' and '\\RADS' in path:
             paths.append(path.split('\\RADS')[0])
-        if name == 'leagueclient.exe' and '\\LeagueClient\\' in path:
-            paths.append(os.path.join(path.split('\\LeagueClient')[0]))
+        if name == 'leagueclient.exe' and '\\LeagueClient.exe' in path:
+            paths.append(os.path.join(path.split('\\LeagueClient.exe')[0]))
         elif name in ('launcher.exe', 'singleplayertool.exe') and 'DevRoot' in path:
             paths.append(os.path.join(path.split('\\DevRoot')[0], 'DevRoot'))
 
@@ -71,7 +71,7 @@ def findInstalledGames():
     elif platform.system() == 'Darwin':
         findMacInstalled(paths)
         findMacRunning(paths)
-
+    
     # Make sure all paths are valid and formatted the same
     paths = [configFilePath(os.path.abspath(path)) for path in paths]
 

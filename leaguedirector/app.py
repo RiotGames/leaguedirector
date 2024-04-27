@@ -1094,7 +1094,7 @@ class LeagueDirector(object):
             widget.setWindowState(Qt.WindowStates(data))
 
     def restoreSettings(self):
-        self.loadState(self.window, self.settings.value('window/state'))
+        self.loadState(self.window, Qt.WindowState(self.settings.value('window/state') or 0))
         self.loadGeometry(self.window, self.settings.value('window/geo'))
         for name, widget in self.windows.items():
             parent = widget.parentWidget()
@@ -1105,11 +1105,11 @@ class LeagueDirector(object):
 
     def saveSettings(self):
         self.settings.setValue('bindings', self.bindings.getBindings())
-        self.settings.setValue('window/state', int(self.window.windowState()))
+        self.settings.setValue('window/state', self.window.windowState().value)
         self.settings.setValue('window/geo', self.window.geometry().getRect())
         for name, widget in self.windows.items():
             parent = widget.parentWidget()
-            self.settings.setValue('{}/state'.format(name), int(parent.windowState()))
+            self.settings.setValue('{}/state'.format(name), parent.windowState().value)
             self.settings.setValue('{}/geo'.format(name), parent.geometry().getRect())
             if hasattr(widget, 'saveSettings'):
                 self.settings.setValue('{}/settings'.format(name), widget.saveSettings())

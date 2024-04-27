@@ -6,9 +6,9 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-PySide6 = "==6.2.4"
-psutil = "==5.9.0"
+PySide6 = "==6.6.3.1"
+psutil = "==5.9.8"
 pyobjc = {version = "==5.1.2", sys_platform = "== 'darwin'"}
 
 [requires]
-python_version = "3.10.4"
+python_version = "3.11.9"

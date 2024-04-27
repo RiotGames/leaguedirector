@@ -1,3 +1,9 @@
+## 0.1.14
+ - Upgrade to Qt 6.6.3.1
+ - Upgrade to Python 3.11.9
+ - Upgrade to psutil 5.9.8
+ - Fix detection of league installs
+
 ## 0.1.3
  - Upgrade to Qt 6
  - Upgrade to Python 3.10
