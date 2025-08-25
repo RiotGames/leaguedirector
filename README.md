@@ -97,5 +97,3 @@ This project makes used of LGPL licensed software [QT for Python](https://doc.qt
 ## Special Thanks
  * Skin Spotlights
  * League of Editing
-
-Hello World!
