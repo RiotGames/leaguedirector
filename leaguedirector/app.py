@@ -330,6 +330,7 @@ class ParticlesWindow(VBoxWidget):
     def __init__(self, api):
         VBoxWidget.__init__(self)
         self.api = api
+        self.api.connected.connect(self.connect)
         self.api.particles.updated.connect(self.update)
         self.items = {}
         self.search = QLineEdit()
@@ -356,6 +357,9 @@ class ParticlesWindow(VBoxWidget):
         if enabled != self.api.particles.getParticle(particle):
             self.api.particles.setParticle(particle, enabled)
 
+    def connect(self):
+        self.search.clear()
+
     def update(self):
         for particle, enabled in self.api.particles.items():
             if particle not in self.items:
@@ -367,7 +371,9 @@ class ParticlesWindow(VBoxWidget):
             self.items[particle].setCheckState(Qt.Checked if enabled else Qt.Unchecked)
         for particle in list(self.items):
             if not self.api.particles.hasParticle(particle):
-                self.list.removeItemWidget(self.items.pop(particle))
+                item = self.items.pop(particle)
+                self.list.takeItem(self.list.row(item))
+                
 
 
 class RecordingWindow(VBoxWidget):
