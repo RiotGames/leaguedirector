@@ -158,6 +158,8 @@ class Render(Resource):
         'healthBarMinions' : True,
         'environment' : True,
         'characters' : True,
+        'champions' : True,
+        'minions': True,
         'particles' : True,
         'banners' : True,
         'skyboxPath' : '',
