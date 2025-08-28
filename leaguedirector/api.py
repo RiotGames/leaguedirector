@@ -125,6 +125,7 @@ class Render(Resource):
     url = '/replay/render'
     fields = {
         'cameraMode' : '',
+
         'cameraPosition' : {'x': 0, 'y': 0, 'z': 0},
         'cameraRotation' : {'x': 0, 'y': 0, 'z': 0},
         'cameraAttached' : False,
@@ -188,36 +189,36 @@ class Render(Resource):
 
     def __init__(self):
         Resource.__init__(self)
-        self.cameraLockX = None
-        self.cameraLockY = None
-        self.cameraLockZ = None
-        self.cameraLockLast = None
+        self.cameraMoveBackX = None
+        self.cameraMoveBackY = None
+        self.cameraMoveBackZ = None
+        self.cameraMoveBackLast = None
         self.timer = QTimer()
-        self.timer.timeout.connect(self.updateCameraLock)
+        self.timer.timeout.connect(self.updateCameraMoveBack)
         self.timer.start(600)
 
-    def updateCameraLock(self, *args):
+    def updateCameraMoveBack(self, *args):
         # Wait until the camera stops moving before snapping it
-        if self.cameraLockLast != self.cameraPosition:
-            self.cameraLockLast = self.cameraPosition
+        if self.cameraMoveBackLast != self.cameraPosition:
+            self.cameraMoveBackLast = self.cameraPosition
         else:
             copy = dict(self.cameraPosition)
-            if self.cameraLockX is not None:
-                copy['x'] = self.cameraLockX
-            if self.cameraLockY is not None:
-                copy['y'] = self.cameraLockY
-            if self.cameraLockZ is not None:
-                copy['z'] = self.cameraLockZ
+            if self.cameraMoveBackX is not None:
+                copy['x'] = self.cameraMoveBackX
+            if self.cameraMoveBackY is not None:
+                copy['y'] = self.cameraMoveBackY
+            if self.cameraMoveBackZ is not None:
+                copy['z'] = self.cameraMoveBackZ
             self.cameraPosition = copy
 
-    def toggleCameraLockX(self):
-        self.cameraLockX = self.cameraPosition['x'] if self.cameraLockX is None else None
+    def toggleCameraMoveBackX(self):
+        self.cameraMoveBackX = self.cameraPosition['x'] if self.cameraMoveBackX is None else None
 
-    def toggleCameraLockY(self):
-        self.cameraLockY = self.cameraPosition['y'] if self.cameraLockY is None else None
+    def toggleCameraMoveBackY(self):
+        self.cameraMoveBackY = self.cameraPosition['y'] if self.cameraMoveBackY is None else None
 
-    def toggleCameraLockZ(self):
-        self.cameraLockZ = self.cameraPosition['z'] if self.cameraLockZ is None else None
+    def toggleCameraMoveBackZ(self):
+        self.cameraMoveBackZ = self.cameraPosition['z'] if self.cameraMoveBackZ is None else None
 
     def moveCamera(self, x=0, y=0, z=0):
         copy = dict(self.cameraPosition)
