@@ -99,6 +99,8 @@ class VisibleWindow(QScrollArea):
         ('healthBarMinions', 'show_healthbar_minions', 'Show Health Minions?'),
         ('environment', 'show_environment', 'Show Environment?'),
         ('characters', 'show_characters', 'Show Characters?'),
+        ('champions', 'show_champions', 'Show Champions?'),
+        ('minions', 'show_minions', 'Show Minions?'),
         ('particles', 'show_particles', 'Show Particles?'),
         ('banners', 'show_banners', 'Show Banners?'),
     ]
@@ -155,6 +157,9 @@ class RenderWindow(QScrollArea):
         self.cameraLockX = BooleanInput('X')
         self.cameraLockY = BooleanInput('Y')
         self.cameraLockZ = BooleanInput('Z')
+        self.cameraMoveBackX = BooleanInput('X')
+        self.cameraMoveBackY = BooleanInput('Y')
+        self.cameraMoveBackZ = BooleanInput('Z')
         self.cameraPosition = VectorInput()
         self.cameraPosition.setSingleStep(10)
         self.cameraRotation = VectorInput([0, -90, -90], [360, 90, 90])
@@ -203,10 +208,12 @@ class RenderWindow(QScrollArea):
         self.depthOfFieldMid.setRelativeStep(0.05)
         self.depthOfFieldFar = FloatInput(0, 100000)
         self.depthOfFieldFar.setRelativeStep(0.05)
-
-        self.cameraLockX.valueChanged.connect(self.api.render.toggleCameraLockX)
-        self.cameraLockY.valueChanged.connect(self.api.render.toggleCameraLockY)
-        self.cameraLockZ.valueChanged.connect(self.api.render.toggleCameraLockZ)
+        self.cameraLockX.valueChanged.connect(functools.partial(self.api.render.set, 'cameraLockX'))
+        self.cameraLockY.valueChanged.connect(functools.partial(self.api.render.set, 'cameraLockY'))
+        self.cameraLockZ.valueChanged.connect(functools.partial(self.api.render.set, 'cameraLockZ'))
+        self.cameraMoveBackX.valueChanged.connect(self.api.render.toggleCameraMoveBackX)
+        self.cameraMoveBackY.valueChanged.connect(self.api.render.toggleCameraMoveBackY)
+        self.cameraMoveBackZ.valueChanged.connect(self.api.render.toggleCameraMoveBackZ)
         self.cameraPosition.valueChanged.connect(functools.partial(self.api.render.set, 'cameraPosition'))
         self.cameraRotation.valueChanged.connect(functools.partial(self.api.render.set, 'cameraRotation'))
         self.cameraAttached.valueChanged.connect(functools.partial(self.api.render.set, 'cameraAttached'))
@@ -243,6 +250,7 @@ class RenderWindow(QScrollArea):
         layout = QFormLayout()
         layout.addRow('Camera Mode', self.cameraMode)
         layout.addRow('Camera Lock', HBoxWidget(self.cameraLockX, self.cameraLockY, self.cameraLockZ))
+        layout.addRow('Camera Move Back To', HBoxWidget(self.cameraMoveBackX, self.cameraMoveBackY, self.cameraMoveBackZ))
         layout.addRow('Camera Position', self.cameraPosition)
         layout.addRow('Camera Rotation', self.cameraRotation)
         layout.addRow('Camera Attached', self.cameraAttached)
@@ -285,12 +293,15 @@ class RenderWindow(QScrollArea):
         self.setWindowTitle('Rendering')
 
     def update(self):
-        self.cameraLockX.update(self.api.render.cameraLockX is not None)
-        self.cameraLockY.update(self.api.render.cameraLockY is not None)
-        self.cameraLockZ.update(self.api.render.cameraLockZ is not None)
-        self.cameraLockX.setCheckboxText('{0:.2f}'.format(self.api.render.cameraLockX) if self.api.render.cameraLockX else 'X')
-        self.cameraLockY.setCheckboxText('{0:.2f}'.format(self.api.render.cameraLockY) if self.api.render.cameraLockY else 'Y')
-        self.cameraLockZ.setCheckboxText('{0:.2f}'.format(self.api.render.cameraLockZ) if self.api.render.cameraLockZ else 'Z')
+        self.cameraLockX.update(self.api.render.cameraLockX)
+        self.cameraLockY.update(self.api.render.cameraLockY)
+        self.cameraLockZ.update(self.api.render.cameraLockZ)
+        self.cameraMoveBackX.update(self.api.render.cameraMoveBackX is not None)
+        self.cameraMoveBackY.update(self.api.render.cameraMoveBackY is not None)
+        self.cameraMoveBackZ.update(self.api.render.cameraMoveBackZ is not None)
+        self.cameraMoveBackX.setCheckboxText('{0:.2f}'.format(self.api.render.cameraMoveBackX) if self.api.render.cameraMoveBackX else 'X')
+        self.cameraMoveBackY.setCheckboxText('{0:.2f}'.format(self.api.render.cameraMoveBackY) if self.api.render.cameraMoveBackY else 'Y')
+        self.cameraMoveBackZ.setCheckboxText('{0:.2f}'.format(self.api.render.cameraMoveBackZ) if self.api.render.cameraMoveBackZ else 'Z')
         self.cameraMode.setText(self.api.render.cameraMode)
         self.cameraPosition.update(self.api.render.cameraPosition)
         self.cameraRotation.update(self.api.render.cameraRotation)
@@ -770,12 +781,18 @@ class Api(QObject):
             self.render.rotateCamera(z=1)
         elif name == 'camera_roll_right':
             self.render.rotateCamera(z=-1)
+        elif name == 'camera_move_back_x':
+            self.render.toggleCameraMoveBackX()
+        elif name == 'camera_move_back_y':
+            self.render.toggleCameraMoveBackY()
+        elif name == 'camera_move_back_z':
+            self.render.toggleCameraMoveBackZ()
         elif name == 'camera_lock_x':
-            self.render.toggleCameraLockX()
+            self.render.cameraLockX = not self.render.cameraLockX
         elif name == 'camera_lock_y':
-            self.render.toggleCameraLockY()
+            self.render.cameraLockY = not self.render.cameraLockY
         elif name == 'camera_lock_z':
-            self.render.toggleCameraLockZ()
+            self.render.cameraLockZ = not self.render.cameraLockZ
         elif name == 'camera_attach':
             self.render.cameraAttached = not self.render.cameraAttached
         elif name == 'camera_fov_up':
@@ -989,6 +1006,9 @@ class LeagueDirector(object):
             ('camera_lock_x',               'Camera Lock X Axis',               ''),
             ('camera_lock_y',               'Camera Lock Y Axis',               ''),
             ('camera_lock_z',               'Camera Lock Z Axis',               ''),
+            ('camera_move_back_x',          'Camera Lock X Axis',               ''),
+            ('camera_move_back_y',               'Camera Lock Y Axis',               ''),
+            ('camera_move_back_z',               'Camera Lock Z Axis',               ''),
             ('camera_attach',               'Camera Attach',                    ''),
             ('camera_fov_up',               'Camera Increase Field of View',    ''),
             ('camera_fov_down',             'Camera Decrease Field of View',    ''),
@@ -1020,6 +1040,8 @@ class LeagueDirector(object):
             ('show_healthbar_minions',      'Show Health Minions',              ''),
             ('show_environment',            'Show Environment',                 ''),
             ('show_characters',             'Show Characters',                  ''),
+            ('show_champions',             'Show Champions',                  ''),
+            ('show_minions',             'Show Minions',                  ''),
             ('show_particles',              'Show Particles',                   ''),
             ('sequence_play',               'Play Sequence',                    'Ctrl+Space'),
             ('sequence_apply',              'Apply Sequence',                   '\\'),
