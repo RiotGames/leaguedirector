@@ -201,7 +201,7 @@ class BooleanInput(QWidget):
         self.setLayout(self.layout)
 
     def handleValueChanged(self, state):
-        self.valueChanged.emit(bool(state == Qt.Checked))
+        self.valueChanged.emit(bool(state == Qt.Checked.value))
 
     def update(self, value):
         self.blockSignals(True)
