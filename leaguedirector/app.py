@@ -99,6 +99,8 @@ class VisibleWindow(QScrollArea):
         ('healthBarMinions', 'show_healthbar_minions', 'Show Health Minions?'),
         ('environment', 'show_environment', 'Show Environment?'),
         ('characters', 'show_characters', 'Show Characters?'),
+        ('champions', 'show_champions', 'Show Champions?'),
+        ('minions', 'show_minions', 'Show Minions?'),
         ('particles', 'show_particles', 'Show Particles?'),
         ('banners', 'show_banners', 'Show Banners?'),
     ]
@@ -1039,6 +1041,8 @@ class LeagueDirector(object):
             ('show_healthbar_minions',      'Show Health Minions',              ''),
             ('show_environment',            'Show Environment',                 ''),
             ('show_characters',             'Show Characters',                  ''),
+            ('show_champions',             'Show Champions',                  ''),
+            ('show_minions',             'Show Minions',                  ''),
             ('show_particles',              'Show Particles',                   ''),
             ('sequence_play',               'Play Sequence',                    'Ctrl+Space'),
             ('sequence_apply',              'Apply Sequence',                   '\\'),
