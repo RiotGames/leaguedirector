@@ -124,8 +124,10 @@ class Recording(Resource):
 class Render(Resource):
     url = '/replay/render'
     fields = {
+        'cameraLockX': False,
+        'cameraLockY': False,
+        'cameraLockZ': False,
         'cameraMode' : '',
-
         'cameraPosition' : {'x': 0, 'y': 0, 'z': 0},
         'cameraRotation' : {'x': 0, 'y': 0, 'z': 0},
         'cameraAttached' : False,

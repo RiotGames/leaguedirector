@@ -154,6 +154,9 @@ class RenderWindow(QScrollArea):
         self.api = api
         self.api.render.updated.connect(self.update)
         self.cameraMode = QLabel('')
+        self.cameraLockX = BooleanInput('X')
+        self.cameraLockY = BooleanInput('Y')
+        self.cameraLockZ = BooleanInput('Z')
         self.cameraMoveBackX = BooleanInput('X')
         self.cameraMoveBackY = BooleanInput('Y')
         self.cameraMoveBackZ = BooleanInput('Z')
@@ -205,7 +208,9 @@ class RenderWindow(QScrollArea):
         self.depthOfFieldMid.setRelativeStep(0.05)
         self.depthOfFieldFar = FloatInput(0, 100000)
         self.depthOfFieldFar.setRelativeStep(0.05)
-
+        self.cameraLockX.valueChanged.connect(functools.partial(self.api.render.set, 'cameraLockX'))
+        self.cameraLockY.valueChanged.connect(functools.partial(self.api.render.set, 'cameraLockY'))
+        self.cameraLockZ.valueChanged.connect(functools.partial(self.api.render.set, 'cameraLockZ'))
         self.cameraMoveBackX.valueChanged.connect(self.api.render.toggleCameraMoveBackX)
         self.cameraMoveBackY.valueChanged.connect(self.api.render.toggleCameraMoveBackY)
         self.cameraMoveBackZ.valueChanged.connect(self.api.render.toggleCameraMoveBackZ)
@@ -244,7 +249,7 @@ class RenderWindow(QScrollArea):
         widget = QWidget()
         layout = QFormLayout()
         layout.addRow('Camera Mode', self.cameraMode)
-        layout.addRow('Camera Lock', HBoxWidget(self.cameraMoveBackX, self.cameraMoveBackY, self.cameraMoveBackZ))
+        layout.addRow('Camera Lock', HBoxWidget(self.cameraLockX, self.cameraLockY, self.cameraLockZ))
         layout.addRow('Camera Move Back To', HBoxWidget(self.cameraMoveBackX, self.cameraMoveBackY, self.cameraMoveBackZ))
         layout.addRow('Camera Position', self.cameraPosition)
         layout.addRow('Camera Rotation', self.cameraRotation)
@@ -288,6 +293,9 @@ class RenderWindow(QScrollArea):
         self.setWindowTitle('Rendering')
 
     def update(self):
+        self.cameraLockX.update(self.api.render.cameraLockX)
+        self.cameraLockY.update(self.api.render.cameraLockY)
+        self.cameraLockZ.update(self.api.render.cameraLockZ)
         self.cameraMoveBackX.update(self.api.render.cameraMoveBackX is not None)
         self.cameraMoveBackY.update(self.api.render.cameraMoveBackY is not None)
         self.cameraMoveBackZ.update(self.api.render.cameraMoveBackZ is not None)
@@ -768,12 +776,18 @@ class Api(QObject):
             self.render.rotateCamera(z=1)
         elif name == 'camera_roll_right':
             self.render.rotateCamera(z=-1)
-        elif name == 'camera_lock_x':
+        elif name == 'camera_move_back_x':
             self.render.toggleCameraMoveBackX()
-        elif name == 'camera_lock_y':
+        elif name == 'camera_move_back_y':
             self.render.toggleCameraMoveBackY()
-        elif name == 'camera_lock_z':
+        elif name == 'camera_move_back_z':
             self.render.toggleCameraMoveBackZ()
+        elif name == 'camera_lock_x':
+            self.render.cameraLockX = not self.render.cameraLockX
+        elif name == 'camera_lock_y':
+            self.render.cameraLockY = not self.render.cameraLockY
+        elif name == 'camera_lock_z':
+            self.render.cameraLockZ = not self.render.cameraLockZ
         elif name == 'camera_attach':
             self.render.cameraAttached = not self.render.cameraAttached
         elif name == 'camera_fov_up':
@@ -987,6 +1001,9 @@ class LeagueDirector(object):
             ('camera_lock_x',               'Camera Lock X Axis',               ''),
             ('camera_lock_y',               'Camera Lock Y Axis',               ''),
             ('camera_lock_z',               'Camera Lock Z Axis',               ''),
+            ('camera_move_back_x',          'Camera Lock X Axis',               ''),
+            ('camera_move_back_y',               'Camera Lock Y Axis',               ''),
+            ('camera_move_back_z',               'Camera Lock Z Axis',               ''),
             ('camera_attach',               'Camera Attach',                    ''),
             ('camera_fov_up',               'Camera Increase Field of View',    ''),
             ('camera_fov_down',             'Camera Decrease Field of View',    ''),
