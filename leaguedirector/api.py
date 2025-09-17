@@ -141,6 +141,7 @@ class Render(Resource):
         'outlineHover' : True,
         'floatingText' : True,
         'navGridOffset' : 0,
+        'simulateAllParticlesWhileOffScreen' : False,
         'interfaceAll' : True,
         'interfaceReplay' : True,
         'interfaceScore' : True,
