@@ -1,3 +1,6 @@
+## 0.1.5
+- Fix detection of League of Legends game clients
+
 ## 0.1.4
  - Upgrade to Qt 6.6.3.1
  - Upgrade to Python 3.11.9
