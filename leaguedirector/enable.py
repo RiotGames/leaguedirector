@@ -7,14 +7,12 @@ from PySide6.QtCore import *
 
 def findWindowsInstalled(paths):
     """
-    Find games installs in the windows registry.
+    Find games install in the windows registry.
     """
-    settings = QSettings('HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node', QSettings.NativeFormat);
-    settings.beginGroup('Riot Games, Inc')
+    settings = QSettings('HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall', QSettings.NativeFormat);
     for key in settings.allKeys():
-        if key.endswith('/Location'):
+        if key.startswith('Riot Game league_of_legends') and key.endswith('InstallLocation'):
             paths.append(settings.value(key))
-    settings.endGroup()
 
 def findWindowsRunning(paths):
     """
